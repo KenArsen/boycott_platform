@@ -1,0 +1,114 @@
+services:
+  api:
+    build:
+      context: ../..  # Указываем корень проекта как контекст
+      dockerfile: config/docker/Dockerfile
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8000:8000"
+    depends_on:
+      - postgres_db
+      - redis
+    env_file:
+      - ../../.env
+    environment:
+      - DATABASE_URL=postgres://boycott_user:boycott_password@postgres_db:5432/boycott_db
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    volumes:
+      - ../../:/app
+    networks:
+      - boycott_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  celery:
+    build:
+      context: ../..
+      dockerfile: config/docker/Dockerfile
+    command: celery -A boycott_platform worker -l info
+    depends_on:
+      - redis
+      - postgres_db
+    env_file:
+      - ../../.env
+    environment:
+      - DATABASE_URL=postgres://boycott_user:boycott_password@postgres_db:5432/boycott_db
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    volumes:
+      - ../../:/app
+    networks:
+      - boycott_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  celery-beat:
+    build:
+      context: ../..
+      dockerfile: config/docker/Dockerfile
+    command: celery -A boycott_platform beat -l info
+    depends_on:
+      - redis
+      - postgres_db
+    env_file:
+      - ../../.env
+    environment:
+      - DATABASE_URL=postgres://boycott_user:boycott_password@postgres_db:5432/boycott_db
+      - CELERY_BROKER_URL=redis://redis:6379/0
+      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+    volumes:
+      - ../../:/app
+    networks:
+      - boycott_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  postgres_db:
+    image: postgres:16.3-alpine
+    environment:
+      POSTGRES_USER: boycott_user
+      POSTGRES_DB: boycott_db
+      POSTGRES_PASSWORD: boycott_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - boycott_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  redis:
+    image: redis:7-alpine
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - boycott_network
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+volumes:
+  postgres_data:
+  redis_data:
+
+networks:
+  boycott_network:
+    driver: bridge

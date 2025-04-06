@@ -1,0 +1,32 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.so
+
+# Django stuff:
+db.sqlite3
+*.log
+
+# Static and media (если собираются отдельно)
+static/
+media/
+
+# Environment and Python deps
+.env
+.venv/
+env/
+*.env
+
+# OS and editor files
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Poetry cache (если не нужно)
+poetry.lock
+
+# Docker internal folders (optional)
+config/nginx/
+scripts/

@@ -1,7 +1,7 @@
 # config/docker/Makefile
 
 # Путь к Docker Compose
-DOCKER_COMPOSE = docker-compose -f config/docker/docker-compose.yaml
+DOCKER_COMPOSE = docker-compose -f config/docker/docker-compose.yaml --env-file $(shell pwd)/.env
 PROJECT_NAME = boycott_platform
 
 # Цель по умолчанию

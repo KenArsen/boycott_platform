@@ -1,13 +1,16 @@
 import logging
 from uuid import UUID
-from django.shortcuts import redirect, render
+
 from django.contrib import messages
 from django.core.exceptions import ValidationError
-from apps.account.forms.registration import RegistrationForm, EmailVerificationForm
+from django.shortcuts import redirect, render
+
+from apps.account.forms.registration import EmailVerificationForm, RegistrationForm
+from apps.account.models import EmailVerificationCode, User
 from apps.account.services.registration import RegistrationService
-from apps.account.models import User, EmailVerificationCode
 
 logger = logging.getLogger(__name__)
+
 
 def registration(request):
     if request.method == "POST":
@@ -29,10 +32,10 @@ def registration(request):
         else:
             logger.debug(f"Форма регистрации невалидна: {form.errors}")
             messages.error(request, "Пожалуйста, исправьте ошибки в форме.")
-        return render(request, "account/registration.html", {"form": form})
+        return render(request, "registration/registration.html", {"form": form})
     else:
         form = RegistrationForm()
-        return render(request, "account/registration.html", {"form": form})
+        return render(request, "registration/registration.html", {"form": form})
 
 
 def verify(request):
@@ -76,4 +79,4 @@ def verify(request):
     else:
         form = EmailVerificationForm()
 
-    return render(request, "account/verify_email.html", {"form": form})
+    return render(request, "registration/verify_email.html", {"form": form})

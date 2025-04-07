@@ -69,6 +69,10 @@ shell:
 migrate:
 	$(DOCKER_COMPOSE) exec web python manage.py migrate
 
+# Создание супер пользователя
+create-superuser:
+	$(DOCKER_COMPOSE) exec web python manage.py create_admin
+
 # Сбор статических файлов
 .PHONY: collectstatic
 collectstatic:

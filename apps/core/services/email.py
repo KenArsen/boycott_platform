@@ -1,10 +1,10 @@
 import logging
-from django.core.mail import EmailMultiAlternatives
-from django.conf import settings
-from django.template.loader import render_to_string
 from typing import List, Optional
 
+from apps.core.tasks import send_email_task
+
 logger = logging.getLogger(__name__)
+
 
 class EmailService:
     """Сервис для отправки email-сообщений."""
@@ -17,45 +17,25 @@ class EmailService:
         from_email: Optional[str] = None,
         html_template: Optional[str] = None,
         template_context: Optional[dict] = None,
-    ):
+    ) -> bool:
         """
-        Отправляет email-сообщение.
-
-        Args:
-            subject: Тема письма.
-            to_emails: Список адресов получателей.
-            plain_message: Текстовое сообщение (обязательно).
-            from_email: Адрес отправителя (по умолчанию из настроек).
-            html_template: Путь к HTML-шаблону (опционально).
-            template_context: Контекст для рендеринга шаблона (опционально).
+        Отправляет email-сообщение асинхронно через Celery.
 
         Returns:
-            bool: Успешно ли отправлено письмо.
+            bool: Успешно ли задача поставлена в очередь.
         """
         try:
-            # Устанавливаем отправителя по умолчанию из настроек, если не указан
-            from_email = from_email or settings.EMAIL_HOST_USER
-
-            # Создаём объект письма
-            email = EmailMultiAlternatives(
+            # Запускаем задачу асинхронно
+            result = send_email_task.delay(
                 subject=subject,
-                body=plain_message,
+                to_emails=to_emails,
+                plain_message=plain_message,
                 from_email=from_email,
-                to=to_emails,
+                html_template=html_template,
+                template_context=template_context,
             )
-
-            # Если передан HTML-шаблон, рендерим и прикрепляем его
-            if html_template and template_context is not None:
-                html_message = render_to_string(html_template, template_context)
-                email.attach_alternative(html_message, "text/html")
-
-            # Отправляем письмо
-            email.send(fail_silently=False)
-            logger.info(f"Email успешно отправлен на {to_emails}")
-        except FileNotFoundError as e:
-            logger.error(f"Шаблон '{html_template}' не найден: {str(e)}")
-            raise FileNotFoundError(f"Шаблон '{html_template}' не найден: {str(e)}")
-
+            logger.info(f"Задача отправки email на {to_emails} поставлена в очередь: {result.id}")
+            return True  # Возвращаем True, если задача успешно поставлена
         except Exception as e:
-            logger.error(f"Ошибка при отправке email на {to_emails}: {str(e)}", exc_info=True)
-            raise Exception(f"Ошибка при отправке email на {to_emails}: {str(e)}")
+            logger.error(f"Ошибка при постановке задачи отправки email на {to_emails}: {str(e)}")
+            raise Exception(f"Ошибка при постановке задачи отправки email: {str(e)}")

@@ -1,6 +1,7 @@
 .env
 poetry.lock
 db.sqlite3
+data/
 media/
 .idea/
 .DS_Store

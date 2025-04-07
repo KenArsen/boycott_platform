@@ -12,7 +12,7 @@ services:
     env_file:
       - ../../.env
     environment:
-      - DATABASE_URL=postgres://boycott_user:boycott_password@postgres_db:5432/boycott_db
+      - DATABASE_URL=${DATABASE_URL}
       - CELERY_BROKER_URL=redis://redis:6379/0
       - CELERY_RESULT_BACKEND=redis://redis:6379/0
     volumes:
@@ -29,16 +29,16 @@ services:
     build:
       context: ../..
       dockerfile: config/docker/Dockerfile
-    command: celery -A boycott_platform worker -l info
+    command: celery -A boycott_platform.celery.app worker -l info
     depends_on:
       - redis
       - postgres_db
     env_file:
       - ../../.env
     environment:
-      - DATABASE_URL=postgres://boycott_user:boycott_password@postgres_db:5432/boycott_db
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - DATABASE_URL=${DATABASE_URL}
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
     volumes:
       - ../../:/app
     networks:
@@ -53,16 +53,16 @@ services:
     build:
       context: ../..
       dockerfile: config/docker/Dockerfile
-    command: celery -A boycott_platform beat -l info
+    command: celery -A boycott_platform.celery.app beat -l info --scheduler django_celery_beat.schedulers:DatabaseScheduler
     depends_on:
       - redis
       - postgres_db
     env_file:
       - ../../.env
     environment:
-      - DATABASE_URL=postgres://boycott_user:boycott_password@postgres_db:5432/boycott_db
-      - CELERY_BROKER_URL=redis://redis:6379/0
-      - CELERY_RESULT_BACKEND=redis://redis:6379/0
+      - DATABASE_URL=${DATABASE_URL}
+      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+      - CELERY_RESULT_BACKEND=${CELERY_RESULT_BACKEND}
     volumes:
       - ../../:/app
     networks:
@@ -76,9 +76,9 @@ services:
   postgres_db:
     image: postgres:16.3-alpine
     environment:
-      POSTGRES_USER: boycott_user
-      POSTGRES_DB: boycott_db
-      POSTGRES_PASSWORD: boycott_password
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
     ports:
       - "5432:5432"
     volumes:

@@ -9,7 +9,7 @@ class RegistrationForm(forms.ModelForm):
 
     class Meta:
         model = User
-        fields = ['email', 'first_name', 'last_name', 'phone_number', 'password', 'confirm_password']
+        fields = ["email", "first_name", "last_name", "phone_number", "password", "confirm_password"]
 
     def clean_email(self):
         email = self.cleaned_data["email"]
@@ -20,9 +20,9 @@ class RegistrationForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         password = cleaned_data.get("password")
-        password_confirm = cleaned_data.get("password_confirm")
+        confirm_password = cleaned_data.get("confirm_password")
 
-        if password and password_confirm and password != password_confirm:
+        if password and confirm_password and password != confirm_password:
             raise forms.ValidationError(_("Passwords do not match."))
 
         return cleaned_data

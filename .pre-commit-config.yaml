@@ -1,4 +1,16 @@
 repos:
+  - repo: https://github.com/pycqa/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        language_version: python3.13  # Примерная версия Python
+        args: [
+          '--line-length=120',
+          '--skip=migrations/',
+          '--skip=__init__.py',
+        ]
+        files: \.py$
+
   - repo: https://github.com/psf/black
     rev: 24.10.0
     hooks:
@@ -19,14 +31,3 @@ repos:
         exclude: "migrations/|__init__.py$"
         files: \.py$
 
-  - repo: https://github.com/pycqa/isort
-    rev: 5.13.2
-    hooks:
-      - id: isort
-        language_version: python3.13  # Примерная версия Python
-        args: [
-          '--line-length=120',
-          '--skip=migrations/',
-          '--skip=__init__.py',
-        ]
-        files: \.py$

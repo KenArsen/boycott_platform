@@ -17,7 +17,13 @@ def registration(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             try:
-                registration_service = RegistrationService(**form.cleaned_data)
+                registration_service = RegistrationService(
+                    email=form.cleaned_data["email"],
+                    password=form.cleaned_data["password"],
+                    first_name=form.cleaned_data["first_name"],
+                    last_name=form.cleaned_data["last_name"],
+                    phone_number=form.cleaned_data["phone_number"],
+                )
                 user, verification_code = registration_service.register()
                 request.session["user"] = str(user.pk)  # Сохраняем UUID как строку
                 logger.info(f"Регистрация успешна для {user.email}, отправлен код верификации")

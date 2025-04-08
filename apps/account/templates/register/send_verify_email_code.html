@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Подтверждение email</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f8f8;
+            padding: 20px;
+            color: #333;
+        }
+        .container {
+            background-color: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            max-width: 600px;
+            margin: auto;
+        }
+        .code {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c3e50;
+            background-color: #ecf0f1;
+            padding: 10px;
+            text-align: center;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+        .footer {
+            font-size: 14px;
+            color: #888;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Здравствуйте, {{ name|default:"Пользователь" }}!</h2>
+        <p>
+            Благодарим вас за регистрацию на <strong>{{ site_name }}</strong>.
+        </p>
+        <p>
+            Пожалуйста, подтвердите ваш email с помощью следующего кода:
+        </p>
+        <div class="code">
+            {{ code }}
+        </div>
+        <p>
+            Этот код действителен в течение {{ expiry_hours }} часов.
+        </p>
+        <p class="footer">
+            Если вы не регистрировались на платформе, просто проигнорируйте это сообщение.
+        </p>
+    </div>
+</body>
+</html>

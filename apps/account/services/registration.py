@@ -1,23 +1,25 @@
 import logging
-from django.utils.translation import gettext_lazy as _
-from django.db import transaction
-from django.core.exceptions import ValidationError
 
-from apps.account.models import User, EmailVerificationCode
+from django.core.exceptions import ValidationError
+from django.db import transaction
+from django.utils.translation import gettext_lazy as _
+
+from apps.account.models import EmailVerificationCode, User
 from apps.core.services.email import EmailService
 
 logger = logging.getLogger(__name__)
 
+
 class RegistrationService:
     def __init__(
-            self,
-            email: str,
-            password: str,
-            first_name: str = "",
-            last_name: str = "",
-            phone_number: str = "",
-            group_names: list = None,
-            is_email_verified: bool = False,
+        self,
+        email: str,
+        password: str,
+        first_name: str = "",
+        last_name: str = "",
+        phone_number: str = "",
+        group_names: list = None,
+        is_email_verified: bool = False,
     ):
         self.email = email
         self.password = password
@@ -68,9 +70,9 @@ class RegistrationService:
             subject=_("Подтверждение email-адреса"),
             to_emails=[self.user.email],
             plain_message=plain_message,
-            html_template="emails/verify_email.html",
+            html_template="register/send_verify_email_code.html",
             template_context={
-                "user": self.verification_code.user,
+                "name": self.verification_code.user.get_full_name(),
                 "code": self.verification_code.code,
                 "site_name": "Платформа бойкота продуктов",
                 "expiry_hours": 24,

@@ -1,11 +1,13 @@
 import uuid
 
 from django.contrib import admin
+from django.contrib.auth.hashers import make_password
 from django.contrib.auth.models import Group
 from django.urls import reverse
 from django.utils.html import mark_safe
 from django.utils.translation import gettext_lazy as _
 
+from apps.account.forms.profile import UserAdminChangeForm
 from apps.account.forms.registration import InvitationForm
 from apps.account.models import Invitation, User
 from apps.core.services.email import EmailService
@@ -23,6 +25,7 @@ class GroupAdmin(admin.ModelAdmin):
 
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
+    form = UserAdminChangeForm
     fieldsets = (
         (None, {"fields": ("email", "password")}),
         (
@@ -69,7 +72,43 @@ class UserAdmin(admin.ModelAdmin):
     search_fields = ("email", "first_name", "last_name")
     list_filter = ("is_active", "is_staff", "groups")
     ordering = ("-created_at",)
-    readonly_fields = ("created_at", "updated_at", "last_login")
+    readonly_fields = (
+        "created_at",
+        "updated_at",
+        "last_login",
+        "is_email_verified",
+    )
+
+    def save_model(self, request, obj, form, change):
+        """Добавление логики для изменения пароля и его шифрования"""
+        if form.cleaned_data.get("password"):
+            # Если пароль был изменен, шифруем его
+            obj.password = make_password(form.cleaned_data["password"])
+
+        super().save_model(request, obj, form, change)
+
+    def get_queryset(self, request):
+        """Модераторы видят только обычных пользователей"""
+        qs = super().get_queryset(request)
+        if request.user.has_role("Moderator") and not request.user.is_superuser:
+            return qs.exclude(groups__name="Admin")
+        return qs
+
+    def get_readonly_fields(self, request, obj=None):
+        """Динамическое добавление readonly полей для пользователей, не являющихся суперпользователями"""
+        readonly_fields = super().get_readonly_fields(request, obj)
+
+        if not request.user.is_superuser:
+            readonly_fields += (
+                "is_email_verified",
+                "is_active",
+                "is_staff",
+                "is_superuser",
+                "groups",
+                "user_permissions",
+            )
+
+        return readonly_fields
 
     # Кастомные методы
     def created_at_short(self, obj):
@@ -93,13 +132,6 @@ class UserAdmin(admin.ModelAdmin):
 
     def has_change_permission(self, request, obj=None):
         return request.user.is_superuser or request.user.has_role("Moderator")
-
-    def get_queryset(self, request):
-        """Модераторы видят только обычных пользователей"""
-        qs = super().get_queryset(request)
-        if request.user.has_role("Moderator") and not request.user.is_superuser:
-            return qs.exclude(groups__name="Admin")
-        return qs
 
 
 @admin.register(Invitation)

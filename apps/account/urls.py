@@ -7,7 +7,7 @@ from apps.account.views.password import (
     CustomPasswordResetView,
 )
 from apps.account.views.profile import profile_edit, profile_view
-from apps.account.views.registration import registration, verify
+from apps.account.views.registration import register_by_invitation_view, registration, verify
 
 app_name = "account"
 
@@ -18,6 +18,11 @@ urlpatterns = [
     path("profile-edit/", profile_edit, name="profile-edit"),
     path("register/", registration, name="register"),
     path("verify-email/", verify, name="verify-email"),
+    path(
+        "register/<uuid:code>/",
+        register_by_invitation_view,
+        name="registration-with-invite",
+    ),
 ]
 
 urlpatterns += [

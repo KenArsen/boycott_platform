@@ -51,19 +51,13 @@ class RegistrationService:
 
     def send_verification_email(self):
         # Текстовая версия сообщения на русском
-        plain_message_template = _(
-            f"""Здравствуйте, {self.user.first_name}!\n\n
+        plain_message = _(
+            f"""Здравствуйте, {self.user.first_name or 'Пользователь'}!\n\n
             Пожалуйста, подтвердите ваш email для платформы Boycott Products Platform.\n
             Ваш код верификации: {self.verification_code.code}\n
             Этот код действителен в течение 24 часов.\n\n
             Спасибо!"""
         )
-        plain_message = plain_message_template % {
-            "first_name": self.user.first_name or "Пользователь",
-            "site_name": "Платформа бойкота продуктов",
-            "code": self.verification_code.code,
-            "expiry_hours": 24,
-        }
 
         # Отправка письма
         success = EmailService.send_email(

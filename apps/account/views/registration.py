@@ -2,11 +2,16 @@ import logging
 from uuid import UUID
 
 from django.contrib import messages
+from django.contrib.auth import login
 from django.core.exceptions import ValidationError
+from django.http import Http404
 from django.shortcuts import redirect, render
+from django.urls import reverse_lazy
+from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from apps.account.forms.registration import EmailVerificationForm, RegistrationForm
-from apps.account.models import EmailVerificationCode, User
+from apps.account.models import EmailVerificationCode, Invitation, User
 from apps.account.services.registration import RegistrationService
 
 logger = logging.getLogger(__name__)
@@ -38,10 +43,10 @@ def registration(request):
         else:
             logger.debug(f"Форма регистрации невалидна: {form.errors}")
             messages.error(request, "Пожалуйста, исправьте ошибки в форме.")
-        return render(request, "registration/registration.html", {"form": form})
+        return render(request, "register/registration.html", {"form": form})
     else:
         form = RegistrationForm()
-        return render(request, "registration/registration.html", {"form": form})
+        return render(request, "register/registration.html", {"form": form})
 
 
 def verify(request):
@@ -85,4 +90,49 @@ def verify(request):
     else:
         form = EmailVerificationForm()
 
-    return render(request, "registration/verify_email.html", {"form": form})
+    return render(request, "register/verify_email.html", {"form": form})
+
+
+def register_by_invitation_view(request, code):
+    # Проверка приглашения
+    try:
+        invitation = Invitation.objects.get(
+            code=code,
+            is_used=False,
+            expires_at__gt=timezone.now(),
+        )
+    except Invitation.DoesNotExist:
+        raise Http404(_("Приглашение не найдено, уже использовано или истекло."))
+
+    if request.method == "POST":
+        form = RegistrationForm(request.POST)
+        if form.is_valid():
+            user = form.save(commit=False)
+            user.email = invitation.email
+            user.set_password(form.cleaned_data["password"])
+            user.save()
+
+            # Добавление в группу и установка прав
+            user.groups.add(invitation.group)
+            if invitation.group.name == "Moderator":
+                user.is_staff = True
+            elif invitation.group.name == "Admin":
+                user.is_staff = True
+                user.is_superuser = True
+            user.save()
+
+            # Обновление приглашения
+            invitation.user = user
+            invitation.is_used = True
+            invitation.save()
+
+            login(request, user)
+            return redirect(reverse_lazy("admin:index"))
+    else:
+        form = RegistrationForm(initial={"email": invitation.email})
+
+    context = {
+        "form": form,
+        "invitation": invitation,
+    }
+    return render(request, "register/register_with_invitation.html", context)

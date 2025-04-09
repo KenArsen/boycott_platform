@@ -1,7 +1,7 @@
 from django import forms
 from django.utils.translation import gettext_lazy as _
 
-from apps.account.models import User
+from apps.account.models import Invitation, User
 
 
 class RegistrationForm(forms.ModelForm):
@@ -48,3 +48,15 @@ class EmailVerificationForm(forms.Form):
         if not code.isdigit() or len(code) != 6:
             raise forms.ValidationError(_("Enter a valid 6-digit numeric code."))
         return code
+
+
+class InvitationForm(forms.ModelForm):
+    class Meta:
+        model = Invitation
+        fields = ["email", "group"]
+
+    def clean_email(self):
+        email = self.cleaned_data["email"]
+        if Invitation.objects.filter(email=email).exclude(pk=self.instance.pk or None).exists():
+            raise forms.ValidationError(_("This email is already invited."))
+        return email

@@ -51,12 +51,12 @@ class EmailService:
             "email": invitation.email,
             "code": invitation.code,
             "group_name": invitation.group.name,
-            "invite_url": f"{settings.DOMAIN}{invitation.get_invitation_url()}",
+            "invitation_url": f"{settings.DOMAIN}{invitation.get_invitation_url()}",
         }
         plain_message = _(
             f"""Вы были приглашены зарегистрироваться на платформе Boycott Products Platform.
             Группа: {template_context['group_name']}
-            Ссылка на регистрацию: {template_context['invite_url']}
+            Ссылка на регистрацию: {template_context['invitation_url']}
             Если вы не запрашивали это, просто проигнорируйте это письмо."""
         )
 

@@ -76,7 +76,7 @@ class Invitation(models.Model):
     )
     user = models.OneToOneField(
         to=User,
-        on_delete=models.SET_NULL,
+        on_delete=models.CASCADE,
         null=True,
         blank=True,
         verbose_name=_("Registered User"),

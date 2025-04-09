@@ -6,7 +6,6 @@ from django.contrib.auth import login
 from django.core.exceptions import ValidationError
 from django.http import Http404
 from django.shortcuts import redirect, render
-from django.urls import reverse_lazy
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
@@ -109,6 +108,7 @@ def register_by_invitation_view(request, code):
         if form.is_valid():
             user = form.save(commit=False)
             user.email = invitation.email
+            user.is_email_verified = True
             user.set_password(form.cleaned_data["password"])
             user.save()
 
@@ -127,7 +127,10 @@ def register_by_invitation_view(request, code):
             invitation.save()
 
             login(request, user)
-            return redirect(reverse_lazy("admin:index"))
+            return redirect("admin:index")
+        else:
+            logger.debug(f"Форма регистрации невалидна: {form.errors}")
+            messages.error(request, "Пожалуйста, исправьте ошибки в форме.")
     else:
         form = RegistrationForm(initial={"email": invitation.email})
 

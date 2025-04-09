@@ -58,6 +58,6 @@
 
 1. Клонируйте репозиторий:
    ```bash
-   git clone https://github.com/KenArsen/boycott.git
-   cd boycott
+   git clone https://github.com/KenArsen/boycott_platform.git
+   cd boycott_platform
    ```

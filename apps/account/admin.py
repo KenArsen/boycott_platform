@@ -1,7 +1,7 @@
 import uuid
 
 from django.contrib import admin
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import Group
 from django.urls import reverse
 from django.utils.html import mark_safe
@@ -19,12 +19,26 @@ admin.site.unregister(Group)
 # Переопределяем стандартный GroupAdmin
 @admin.register(Group)
 class GroupAdmin(admin.ModelAdmin):
-    list_display = ("name",)
+    list_display = ("name", "user_count")
     search_fields = ("name",)
+
+    def user_count(self, obj):
+        return obj.user_set.count()
+
+    user_count.short_description = _("Количество пользователей")
+
+    def has_change_permission(self, request, obj=None):
+        return True if request.user.is_superuser else False
+
+    def has_delete_permission(self, request, obj=None):
+        return True if request.user.is_superuser else False
+
+    def has_add_permission(self, request, obj=None):
+        return True if request.user.is_superuser else False
 
 
 @admin.register(User)
-class UserAdmin(admin.ModelAdmin):
+class UserAdmin(BaseUserAdmin):
     form = UserAdminChangeForm
     fieldsets = (
         (None, {"fields": ("email", "password")}),
@@ -78,14 +92,6 @@ class UserAdmin(admin.ModelAdmin):
         "last_login",
         "is_email_verified",
     )
-
-    def save_model(self, request, obj, form, change):
-        """Добавление логики для изменения пароля и его шифрования"""
-        if form.cleaned_data.get("password"):
-            # Если пароль был изменен, шифруем его
-            obj.password = make_password(form.cleaned_data["password"])
-
-        super().save_model(request, obj, form, change)
 
     def get_queryset(self, request):
         """Модераторы видят только обычных пользователей"""

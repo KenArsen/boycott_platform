@@ -1,5 +1,8 @@
 from pathlib import Path
 
+from django.conf.locale import LANG_INFO
+from django.utils.translation import gettext_lazy as _
+
 from .environment import env
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -9,6 +12,7 @@ SECRET_KEY = env.str("SECRET_KEY")
 INSTALLED_APPS = [
     # first party apps
     "jazzmin",
+    "modeltranslation",
     # second party apps
     "django.contrib.admin",
     "django.contrib.auth",
@@ -102,7 +106,7 @@ JAZZMIN_SETTINGS = {
         "auth.account": "collapsible",
         "auth.group": "vertical_tabs",
     },
-    "language_chooser": False,
+    "language_chooser": True,
 }
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
@@ -119,7 +123,28 @@ CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 
+# Internationalization settings
 LANGUAGE_CODE = "ru-ru"
+LANGUAGES = [
+    ("en", _("English")),
+    ("ru", _("Russian")),
+    ("kg", _("Kyrgyz")),
+]
+
+MODELTRANSLATION_LANGUAGES = ("en", "ru", "kg")
+MODELTRANSLATION_DEFAULT_LANGUAGE = "en"
+
+LANG_INFO.update(
+    {
+        "kg": {
+            "bidi": False,
+            "code": "kg",
+            "name": "Kyrgyz",
+            "name_local": "Кыргызча",
+        },
+    }
+)
+
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True

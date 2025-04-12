@@ -1,0 +1,162 @@
+[
+  {
+    "model": "product.category",
+    "pk": "0e66115c-9b5e-482b-a0d7-cdb05eeeb41e",
+    "fields": {
+      "created_at": "2025-01-28T12:00:00Z",
+      "updated_at": "2025-01-28T12:00:00Z",
+      "name": "Аксессуары",
+      "name_en": "Accessories",
+      "name_ru": "Аксессуары",
+      "name_kg": "Аксессуарлар",
+      "slug": "accessories",
+      "description_ru": "Местные бренды аксессуаров: сумки, ремни, украшения.",
+      "description_kg": "Жергиликтүү аксессуар бренддери: сумкалар, кур, кооздуктар.",
+      "description_en": "Local accessory brands: bags, belts, jewelry."
+    }
+  },
+  {
+    "model": "product.category",
+    "pk": "18090415-9db0-430d-ada7-a0a2492cb175",
+    "fields": {
+      "created_at": "2025-01-28T12:00:00Z",
+      "updated_at": "2025-01-28T12:00:00Z",
+      "name": "Гигиенические средства",
+      "name_en": "Hygienic cosmetics",
+      "name_ru": "Гигиенические средства",
+      "name_kg": "Гигиеналык каражаттар",
+      "slug": "hygienic-cosmetics",
+      "description_ru": "Натуральные и экологически чистые гигиенические средства.",
+      "description_kg": "Табигый жана экологиялык таза гигиеналык каражаттар.",
+      "description_en": "Natural and eco-friendly hygienic products."
+    }
+  },
+  {
+    "model": "product.category",
+    "pk": "46c1d713-3878-45b2-a723-a46d59ecd223",
+    "fields": {
+      "created_at": "2025-01-28T12:00:00Z",
+      "updated_at": "2025-01-28T12:00:00Z",
+      "name": "Одежда",
+      "name_en": "Clothes",
+      "name_ru": "Одежда",
+      "name_kg": "Кийимдер",
+      "slug": "clothes",
+      "description_ru": "Кыргызские бренды одежды: стильно, качественно, доступно.",
+      "description_kg": "Кыргызстандын кийим бренддери: стилдүү, сапаттуу, арзан.",
+      "description_en": "Kyrgyz clothing brands: stylish, high-quality, affordable."
+    }
+  },
+  {
+    "model": "product.category",
+    "pk": "5f094711-7354-4486-8364-3a41dfea0be5",
+    "fields": {
+      "created_at": "2025-01-28T12:00:00Z",
+      "updated_at": "2025-01-28T12:00:00Z",
+      "name": "Бытовая техника",
+      "name_en": "Home Appliances",
+      "name_ru": "Бытовая техника",
+      "name_kg": "Үй техникасы",
+      "slug": "home-appliances",
+      "description_ru": "Альтернативы бытовой техники: надежно и доступно.",
+      "description_kg": "Үй техникасынын альтернативалары: ишенимдүү жана арзан.",
+      "description_en": "Alternatives to home appliances: reliable and affordable."
+    }
+  },
+  {
+    "model": "product.category",
+    "pk": "65c78212-c110-42b7-82d1-35439836812d",
+    "fields": {
+      "created_at": "2025-01-28T12:00:00Z",
+      "updated_at": "2025-01-28T12:00:00Z",
+      "name": "Спортивные товары",
+      "name_en": "Sports Equipment",
+      "name_ru": "Спортивные товары",
+      "name_kg": "Спорт товарлары",
+      "slug": "sports-equipment",
+      "description_ru": "Спортивные товары местного производства: для здоровья и активности.",
+      "description_kg": "Жергиликтүү спорт товарлары: ден-соолук жана активдүүлүк үчүн.",
+      "description_en": "Locally produced sports equipment: for health and activity."
+    }
+  },
+  {
+    "model": "product.category",
+    "pk": "821e87d7-b671-4f1c-bb83-14ac59689401",
+    "fields": {
+      "created_at": "2025-01-28T12:00:00Z",
+      "updated_at": "2025-01-28T12:00:00Z",
+      "name": "Косметика",
+      "name_en": "Cosmetics",
+      "name_ru": "Косметика",
+      "name_kg": "Косметика",
+      "slug": "cosmetics",
+      "description_ru": "Натуральная косметика от кыргызских производителей.",
+      "description_kg": "Кыргызстандын өндүрүүчүлөрүнүн табигый косметикасы.",
+      "description_en": "Natural cosmetics from Kyrgyz producers."
+    }
+  },
+  {
+    "model": "product.category",
+    "pk": "8a3d6f31-8371-4dc7-8e7f-d9f9775516d2",
+    "fields": {
+      "created_at": "2025-01-28T12:00:00Z",
+      "updated_at": "2025-01-28T12:00:00Z",
+      "name": "Продукты питания",
+      "name_en": "Foods",
+      "name_ru": "Продукты питания",
+      "name_kg": "Тамак-аш",
+      "slug": "foods",
+      "description_ru": "Найдите местные аналоги продуктов: свежо, вкусно, полезно.",
+      "description_kg": "Жергиликтүү тамак-аштын альтернативалары: таза, даамдуу, пайдалуу.",
+      "description_en": "Find local alternatives to products: fresh, tasty, healthy."
+    }
+  },
+  {
+    "model": "product.category",
+    "pk": "8a738b29-80c9-46de-952c-68bff27b2002",
+    "fields": {
+      "created_at": "2025-01-28T12:00:00Z",
+      "updated_at": "2025-01-28T12:00:00Z",
+      "name": "Химические средства",
+      "name_en": "Chemical repellents",
+      "name_ru": "Химические средства",
+      "name_kg": "Химиялык каражаттар",
+      "slug": "chemical-repellents",
+      "description_ru": "Экологически безопасные химические средства.",
+      "description_kg": "Экологиялык коопсуз химиялык каражаттар.",
+      "description_en": "Eco-friendly chemical products."
+    }
+  },
+  {
+    "model": "product.category",
+    "pk": "aa40d1f1-5ccd-4ffa-9052-326015a76c59",
+    "fields": {
+      "created_at": "2025-01-28T12:00:00Z",
+      "updated_at": "2025-01-28T12:00:00Z",
+      "name": "Лекарство",
+      "name_en": "Medicine",
+      "name_ru": "Лекарство",
+      "name_kg": "Дары",
+      "slug": "medicine",
+      "description_ru": "Лекарства и медицинские товары местного производства.",
+      "description_kg": "Жергиликтүү дары-дармектер жана медициналык товарлар.",
+      "description_en": "Medicines and medical products from local producers."
+    }
+  },
+  {
+    "model": "product.category",
+    "pk": "d8cf1304-3c9c-409a-bf5b-7bc3739e939a",
+    "fields": {
+      "created_at": "2025-01-28T12:00:00Z",
+      "updated_at": "2025-01-28T12:00:00Z",
+      "name": "Технология",
+      "name_en": "Technology",
+      "name_ru": "Технология",
+      "name_kg": "Технология",
+      "slug": "technology",
+      "description_ru": "Технологии и гаджеты от кыргызских производителей.",
+      "description_kg": "Кыргызстандын өндүрүүчүлөрүнүн технологиялары жана гаджеттери.",
+      "description_en": "Technologies and gadgets from Kyrgyz producers."
+    }
+  }
+]

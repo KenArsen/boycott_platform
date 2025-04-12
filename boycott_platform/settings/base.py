@@ -24,6 +24,7 @@ INSTALLED_APPS = [
     # local apps
     "apps.core.apps.CoreConfig",
     "apps.account.apps.AccountConfig",
+    "apps.product.apps.ProductConfig",
 ]
 
 MIDDLEWARE = [
@@ -106,7 +107,7 @@ JAZZMIN_SETTINGS = {
         "auth.account": "collapsible",
         "auth.group": "vertical_tabs",
     },
-    "language_chooser": True,
+    "language_chooser": False,
 }
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"

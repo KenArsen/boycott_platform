@@ -14,6 +14,7 @@ class Command(BaseCommand):
                 first_name="Admin",
                 last_name="Admin",
                 phone_number="0 (XXX) XX XX XX",
+                is_email_verified=True,
             )
             self.stdout.write(self.style.SUCCESS("Superuser created: admin@gmail.com / admin"))
         else:

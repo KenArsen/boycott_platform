@@ -19,6 +19,7 @@ dj-database-url = "^2.3.0"
 redis = "^5.2.1"
 psycopg2-binary = "^2.9.10"
 django-modeltranslation = "^0.19.13"
+requests = "^2.32.3"
 
 
 [tool.poetry.group.dev.dependencies]

@@ -29,6 +29,10 @@ services:
     build:
       context: ../..
       dockerfile: config/docker/Dockerfile
+    environment:
+      - OLLAMA_HOST=host.docker.internal:11434
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
     command: celery -A boycott_platform worker -l info
     depends_on:
       - redis

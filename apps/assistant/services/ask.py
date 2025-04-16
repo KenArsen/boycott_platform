@@ -1,34 +1,28 @@
 import requests
+
 from apps.product.models import Product
 
 
-def ask_ai_about_product(question: str) -> str:
-    products = Product.objects.filter(is_boycotted=True).select_related('boycott_reason')[:5]
-
-    context = "Вот некоторые бойкотированные товары:\n"
-    for product in products:
-        print(product.name)
-        context += f"- {product.name}: {product.description}\n"
-
-    # 2. Формируем промпт
+def ask_product_assistant(product_id, user_question):
+    product = Product.objects.get(pk=product_id)
     prompt = f"""
-    Вот информация о бойкотируемых товарах:
-    {context}
+Ты — ассистент. Используй только эту информацию о продукте:
 
-    Вопрос пользователя: {question}
-    Ответь на русском языке, как специалист.
+Название: EN({product.name_en}), RU({product.name_ru}, KG({product.name_kg})
+Описание:  EN({product.description_en})\n\nRU({product.description}\n\nKG({product.description_kg})
+
+Теперь ответь на вопрос пользователя на русском:
+"{user_question}"
     """
 
     try:
-        # 3. Отправляем запрос в локальный Ollama-сервер
         response = requests.post(
-            "http://host.docker.internal:11434/api/generate",
-            json={
-                "model": "nous-hermes2",
-                "prompt": prompt,
-                "stream": False,
-            }
+            "http://localhost:11434/api/generate", json={"model": "nous-hermes2", "prompt": prompt, "stream": False}
         )
+        answer = response.json()["response"].strip().lower()
+
+        return answer
     except requests.exceptions.RequestException as e:
-        print(e)
-    return response.json()["response"]
+        return f"❌ Ошибка обработки {product.name}: {e}"
+    except Exception as e:
+        return f"❌ Ошибка обработки {product.name}: {e}"

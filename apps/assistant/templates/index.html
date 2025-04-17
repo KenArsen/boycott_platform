@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebSocket Тест</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .chat-container {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        #chat-log {
+            width: 100%;
+            height: 300px;
+            margin-bottom: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            resize: none;
+        }
+        .input-area {
+            display: flex;
+            gap: 10px;
+        }
+        #chat-message-input {
+            flex-grow: 1;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+        #chat-message-submit {
+            padding: 8px 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #chat-message-submit:hover {
+            background-color: #45a049;
+        }
+        .room-selection {
+            margin-bottom: 20px;
+        }
+        #room-input {
+            padding: 8px;
+            margin-right: 10px;
+        }
+        #join-room-button {
+            padding: 8px 16px;
+            background-color: #2196F3;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        #join-room-button:hover {
+            background-color: #0b7dda;
+        }
+        .status {
+            margin-top: 10px;
+            font-style: italic;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Django WebSocket Чат</h1>
+
+    <div class="room-selection">
+        <h2>Присоединиться к комнате</h2>
+        <input id="room-input" type="text" placeholder="Имя комнаты">
+        <button id="join-room-button">Присоединиться</button>
+    </div>
+
+    <div class="chat-container" id="chat-section" style="display: none;">
+        <h2>Чат: <span id="current-room">-</span></h2>
+        <textarea id="chat-log" readonly></textarea>
+        <div class="input-area">
+            <input id="chat-message-input" type="text" placeholder="Введите сообщение">
+            <button id="chat-message-submit">Отправить</button>
+        </div>
+        <div class="status" id="connection-status">Не подключено</div>
+    </div>
+
+    <script>
+        let chatSocket = null;
+
+        document.getElementById('join-room-button').onclick = function() {
+            const roomName = document.getElementById('room-input').value.trim();
+            if (roomName) {
+                joinRoom(roomName);
+            } else {
+                alert('Пожалуйста, введите имя комнаты');
+            }
+        };
+
+        function joinRoom(roomName) {
+            // Если уже есть активное соединение, закрываем его
+            if (chatSocket) {
+                chatSocket.close();
+            }
+
+            // Подключаемся к WebSocket
+            chatSocket = new WebSocket(
+                'ws://' + window.location.host + '/ws/ai-chat/' + roomName + '/'
+            );
+
+            // Устанавливаем текущую комнату и показываем чат
+            document.getElementById('current-room').textContent = roomName;
+            document.getElementById('chat-section').style.display = 'block';
+            document.getElementById('connection-status').textContent = 'Подключение...';
+
+            chatSocket.onopen = function(e) {
+                document.getElementById('connection-status').textContent = 'Подключено';
+                document.getElementById('chat-log').value += 'Вы присоединились к комнате: ' + roomName + '\n';
+            };
+
+            chatSocket.onmessage = function(e) {
+                const data = JSON.parse(e.data);
+                document.getElementById('chat-log').value += data.message + '\n';
+                // Прокручиваем чат вниз
+                document.getElementById('chat-log').scrollTop = document.getElementById('chat-log').scrollHeight;
+            };
+
+            chatSocket.onclose = function(e) {
+                document.getElementById('connection-status').textContent = 'Отключено';
+                document.getElementById('chat-log').value += 'Соединение закрыто\n';
+            };
+
+            chatSocket.onerror = function(e) {
+                document.getElementById('connection-status').textContent = 'Ошибка подключения';
+                document.getElementById('chat-log').value += 'Ошибка WebSocket соединения\n';
+            };
+        }
+
+        document.getElementById('chat-message-input').onkeypress = function(e) {
+            if (e.keyCode === 13) {  // Enter
+                document.getElementById('chat-message-submit').click();
+                return false;
+            }
+        };
+
+        document.getElementById('chat-message-submit').onclick = function(e) {
+            const messageInput = document.getElementById('chat-message-input');
+            const message = messageInput.value.trim();
+
+            if (message && chatSocket && chatSocket.readyState === WebSocket.OPEN) {
+                chatSocket.send(JSON.stringify({
+                    'message': message
+                }));
+                messageInput.value = '';
+            }
+        };
+    </script>
+</body>
+</html>

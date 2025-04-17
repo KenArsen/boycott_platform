@@ -1,5 +1,8 @@
 from pathlib import Path
 
+from django.conf.locale import LANG_INFO
+from django.utils.translation import gettext_lazy as _
+
 from .environment import env
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
@@ -9,6 +12,7 @@ SECRET_KEY = env.str("SECRET_KEY")
 INSTALLED_APPS = [
     # first party apps
     "jazzmin",
+    "modeltranslation",
     # second party apps
     "django.contrib.admin",
     "django.contrib.auth",
@@ -18,8 +22,11 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # third party apps
     # local apps
+    "channels",
     "apps.core.apps.CoreConfig",
     "apps.account.apps.AccountConfig",
+    "apps.product.apps.ProductConfig",
+    "apps.assistant.apps.AssistantConfig",
 ]
 
 MIDDLEWARE = [
@@ -50,6 +57,7 @@ TEMPLATES = [
     },
 ]
 
+ASGI_APPLICATION = "boycott_platform.asgi.application"
 WSGI_APPLICATION = "boycott_platform.wsgi.application"
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -105,6 +113,15 @@ JAZZMIN_SETTINGS = {
     "language_chooser": False,
 }
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+    },
+}
+
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = env.str("EMAIL_HOST", default="smtp.gmail.com")
 EMAIL_PORT = env.int("EMAIL_PORT", default=587)
@@ -119,13 +136,35 @@ CELERY_ACCEPT_CONTENT = ["json"]
 CELERY_TASK_SERIALIZER = "json"
 CELERY_RESULT_SERIALIZER = "json"
 
+# Internationalization settings
 LANGUAGE_CODE = "ru-ru"
+LANGUAGES = [
+    ("en", _("English")),
+    ("ru", _("Russian")),
+    ("kg", _("Kyrgyz")),
+]
+
+MODELTRANSLATION_LANGUAGES = ("en", "ru", "kg")
+MODELTRANSLATION_DEFAULT_LANGUAGE = "en"
+
+LANG_INFO.update(
+    {
+        "kg": {
+            "bidi": False,
+            "code": "kg",
+            "name": "Kyrgyz",
+            "name_local": "Кыргызча",
+        },
+    }
+)
+
 USE_I18N = True
 USE_L10N = True
 USE_TZ = True
 
 STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"

@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # third party apps
     # local apps
+    "channels",
     "apps.core.apps.CoreConfig",
     "apps.account.apps.AccountConfig",
     "apps.product.apps.ProductConfig",
@@ -56,6 +57,7 @@ TEMPLATES = [
     },
 ]
 
+ASGI_APPLICATION = "boycott_platform.asgi.application"
 WSGI_APPLICATION = "boycott_platform.wsgi.application"
 
 AUTH_PASSWORD_VALIDATORS = [
@@ -111,6 +113,15 @@ JAZZMIN_SETTINGS = {
     "language_chooser": False,
 }
 
+CHANNEL_LAYERS = {
+    "default": {
+        "BACKEND": "channels_redis.core.RedisChannelLayer",
+        "CONFIG": {
+            "hosts": [("redis", 6379)],
+        },
+    },
+}
+
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
 EMAIL_HOST = env.str("EMAIL_HOST", default="smtp.gmail.com")
 EMAIL_PORT = env.int("EMAIL_PORT", default=587)
@@ -153,6 +164,7 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATICFILES_DIRS = [BASE_DIR / "static"]
+STATIC_ROOT = BASE_DIR / "staticfiles"
 
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"

@@ -1,5 +1,10 @@
-from django.urls import path  # noqa
+from django.urls import path
+
+from apps.assistant.views import index, room
 
 app_name = "assistant"
 
-urlpatterns = []
+urlpatterns = [
+    path("", index, name="index"),
+    path("<str:room_name>/", room, name="room"),
+]

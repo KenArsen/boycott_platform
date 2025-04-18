@@ -27,7 +27,7 @@ class Category(CoreModel):
         return self.name
 
 
-class Reason(models.Model):
+class Reason(CoreModel):
     """Причина бойкота (например, Эксплуатация детского труда, Экологический вред)"""
 
     title = models.CharField(max_length=255, verbose_name=_("Title"))

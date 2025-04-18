@@ -1,0 +1,82 @@
+[
+  {
+    "model": "product.reason",
+    "pk": "2ef72cbe-f29d-4baf-9edf-007cec293279",
+    "fields": {
+      "created_at": "2025-04-18T10:18:17.244Z",
+      "updated_at": "2025-04-18T10:18:17.244Z",
+      "title": "Инвестиции в израильскую экономику",
+      "title_en": "Investments in the Israeli economy",
+      "title_ru": "Инвестиции в израильскую экономику",
+      "title_kg": "Израил экономикасына инвестициялар",
+      "description": "Компании, инвестирующие значительные средства в израильские проекты, стартапы, филиалы или имеющие производственные мощности в Израиле, что способствует укреплению экономики страны.",
+      "description_en": "Companies investing significant funds in Israeli projects, startups, branches, or having production facilities in Israel, thereby strengthening the country's economy.",
+      "description_ru": "Компании, инвестирующие значительные средства в израильские проекты, стартапы, филиалы или имеющие производственные мощности в Израиле, что способствует укреплению экономики страны.",
+      "description_kg": "Израилдеги долбоорлорго, стартаптарга, филиалдарга же өндүрүш жайларына олуттуу каражаттарды инвестициялаган компаниялар өлкөнүн экономикасын чыңдоого салым кошот."
+    }
+  },
+  {
+    "model": "product.reason",
+    "pk": "58bd6f22-c6f7-40a1-bbdb-7740d28b42a8",
+    "fields": {
+      "created_at": "2025-04-18T10:18:22.681Z",
+      "updated_at": "2025-04-18T10:18:22.681Z",
+      "title": "Производство на оккупированных территориях",
+      "title_en": "Production in occupied territories",
+      "title_ru": "Производство на оккупированных территориях",
+      "title_kg": "Басып алынган аймактарда өндүрүш",
+      "description": "Компании, ведущие производственную деятельность на территориях, незаконно оккупированных Израилем, включая палестинские земли, что нарушает международное право.",
+      "description_en": "Companies conducting production activities in territories illegally occupied by Israel, including Palestinian lands, which violates international law.",
+      "description_ru": "Компании, ведущие производственную деятельность на территориях, незаконно оккупированных Израилем, включая палестинские земли, что нарушает международное право.",
+      "description_kg": "Израил тарабынан мыйзамсыз басып алынган аймактарда, анын ичинде Палестина жерлеринде өндүрүш иштерин жүргүзгөн компаниялар эл аралык укукту бузат."
+    }
+  },
+  {
+    "model": "product.reason",
+    "pk": "5dcbebb9-8404-4a4d-b07b-f7401b653c3f",
+    "fields": {
+      "created_at": "2025-04-18T10:18:20.221Z",
+      "updated_at": "2025-04-18T10:18:20.221Z",
+      "title": "Поддержка сионизма",
+      "title_en": "Support for Zionism",
+      "title_ru": "Поддержка сионизма",
+      "title_kg": "Сионизмди колдоо",
+      "description": "Компании или бренды, прямо или косвенно поддерживающие сионистскую идеологию, включая израильские бренды или компании с лидерами, выступающими за сионизм.",
+      "description_en": "Companies or brands directly or indirectly supporting Zionist ideology, including Israeli brands or companies with leaders advocating for Zionism.",
+      "description_ru": "Компании или бренды, прямо или косвенно поддерживающие сионистскую идеологию, включая израильские бренды или компании с лидерами, выступающими за сионизм.",
+      "description_kg": "Сионисттик идеологияны түз же кыйыр түрдө колдогон компаниялар же бренддер, анын ичинде израилдик бренддер же сионизмди жактаган лидерлери бар компаниялар."
+    }
+  },
+  {
+    "model": "product.reason",
+    "pk": "f94a7ba9-b7ce-4846-a671-82c359842ded",
+    "fields": {
+      "created_at": "2025-04-18T10:18:25.226Z",
+      "updated_at": "2025-04-18T10:18:25.226Z",
+      "title": "Прямая поддержка израильских военных структур",
+      "title_en": "Direct support for Israeli military structures",
+      "title_ru": "Прямая поддержка израильских военных структур",
+      "title_kg": "Израилдин аскерий түзүмдөрүн түз колдоо",
+      "description": "Компании, оказывающие прямую поддержку израильским военным силам или структурам, включая поставки продукции, финансовую помощь или публичные заявления в поддержку.",
+      "description_en": "Companies providing direct support to Israeli military forces or structures, including product supplies, financial assistance, or public statements of support.",
+      "description_ru": "Компании, оказывающие прямую поддержку израильским военным силам или структурам, включая поставки продукции, финансовую помощь или публичные заявления в поддержку.",
+      "description_kg": "Израилдин аскерий күчтөрүнө же түзүмдөрүнө түз колдоо көрсөткөн компаниялар, анын ичинде продукция жеткирүү, каржылык жардам же ачык колдоо билдирүүлөрү."
+    }
+  },
+  {
+    "model": "product.reason",
+    "pk": "f9c85177-cec9-46e5-9cdc-59049218ac1d",
+    "fields": {
+      "created_at": "2025-04-18T10:18:27.726Z",
+      "updated_at": "2025-04-18T10:18:27.726Z",
+      "title": "Этические нарушения",
+      "title_en": "Ethical violations",
+      "title_ru": "Этические нарушения",
+      "title_kg": "Этикалык бузуулар",
+      "description": "Компания была замечена в этических нарушениях, таких как производство опасной продукции, причинение вреда потребителям или окружающей среде.",
+      "description_en": "The company has been observed in ethical violations such as producing dangerous products, causing harm to consumers or the environment.",
+      "description_ru": "Компания была замечена в этических нарушениях, таких как производство опасной продукции, причинение вреда потребителям или окружающей среде.",
+      "description_kg": "Компания коркунучтуу продукцияларды өндүрүү, керектөөчүлөргө же айлана-чөйрөгө зыян келтирүү сыяктуу этикалык бузууларда байкалган."
+    }
+  }
+]

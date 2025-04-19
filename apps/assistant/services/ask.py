@@ -1,4 +1,5 @@
 import requests
+from requests.exceptions import ConnectionError, Timeout
 
 
 def get_ai_response(message):
@@ -14,5 +15,9 @@ def get_ai_response(message):
         answer = response.json()["response"].strip().lower()
 
         return answer
+    except ConnectionError:
+        return "❌ Не удалось подключиться к API. Возможно, сервер не запущен."
+    except Timeout:
+        return "⏱️ Время ожидания истекло."
     except Exception as e:
         return f"❌ Ошибка обработки: {e}"

@@ -5,7 +5,7 @@ import uuid
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-from .ask import get_ai_response
+from .ai_response import get_ai_response
 
 logger = logging.getLogger(__name__)
 

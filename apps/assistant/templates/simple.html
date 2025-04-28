@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Продуктовый помощник</title>
+    <style>
+        /* --- Твой же стиль --- */
+        /* Сюда вставляются все твои стили без изменений */
+        /* Я могу вставить сюда твой CSS, если нужно, но он точно остаётся таким же */
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h1>Продуктовый помощник</h1>
+        </div>
+
+        <div class="chat-messages" id="chatMessages">
+            <div class="message bot-message">
+                <div class="avatar bot-avatar">Б</div>
+                <div class="message-content">
+                    Здравствуйте! Я ваш помощник по продуктам. Задайте мне вопрос про любой продукт или его альтернативы.
+                </div>
+            </div>
+        </div>
+
+        <div class="error-message" id="errorMessage">
+            Произошла ошибка при обработке запроса. Пожалуйста, попробуйте ещё раз.
+        </div>
+
+        <div class="loader" id="loader"></div>
+
+        <div class="chat-input-container">
+            <form class="chat-form" id="chatForm">
+                <textarea
+                    class="chat-input"
+                    id="chatInput"
+                    placeholder="Напишите сообщение..."
+                    rows="1"
+                    oninput="resizeTextarea(this)"
+                ></textarea>
+                <button class="send-button" type="submit" id="sendButton">
+                    Отправить
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        function resizeTextarea(textarea) {
+            textarea.style.height = 'auto';
+            textarea.style.height = Math.min(textarea.scrollHeight, 200) + 'px';
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const chatForm = document.getElementById('chatForm');
+            const chatInput = document.getElementById('chatInput');
+            const chatMessages = document.getElementById('chatMessages');
+            const sendButton = document.getElementById('sendButton');
+            const loader = document.getElementById('loader');
+            const errorMessage = document.getElementById('errorMessage');
+
+            chatForm.addEventListener('submit', async function(e) {
+                e.preventDefault();
+
+                const userMessage = chatInput.value.trim();
+                if (!userMessage) return;
+
+                appendUserMessage(userMessage);
+
+                chatInput.value = '';
+                chatInput.style.height = 'auto';
+
+                loader.style.display = 'block';
+                errorMessage.style.display = 'none';
+                sendButton.disabled = true;
+
+                try {
+                    const response = await fetch('/assistant/simple/', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRFToken': getCookie('csrftoken')  // Django CSRF защита
+                        },
+                        body: JSON.stringify({ message: userMessage })
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Ошибка запроса');
+                    }
+
+                    const data = await response.json();
+                    appendBotMessage(data);
+                } catch (error) {
+                    console.error('Ошибка:', error);
+                    errorMessage.style.display = 'block';
+                } finally {
+                    loader.style.display = 'none';
+                    sendButton.disabled = false;
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+            });
+
+            function appendUserMessage(message) {
+                const messageElement = document.createElement('div');
+                messageElement.className = 'message user-message';
+                messageElement.innerHTML = `
+                    <div class="avatar">П</div>
+                    <div class="message-content">${message}</div>
+                `;
+                chatMessages.appendChild(messageElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function appendBotMessage(data) {
+                const messageElement = document.createElement('div');
+                messageElement.className = 'message bot-message';
+                let messageHTML = `
+                    <div class="avatar bot-avatar">Б</div>
+                    <div class="message-content">
+                        ${data.text || ''}
+                `;
+
+                if (data.product) {
+                    const product = data.product;
+                    let statusClass = product.is_boycotted ? 'boycotted' : 'safe';
+                    let statusText = product.is_boycotted ? 'Бойкотируется' : 'Не бойкотируется';
+
+                    messageHTML += `
+                        <div class="product-card">
+                            ${product.image_url ? `<img src="${product.image_url}" alt="${product.name}" class="product-image">` : ''}
+                            <div class="product-details">
+                                <div class="product-name">${product.name}</div>
+                                <div class="product-status ${statusClass}">${statusText}</div>
+                                ${product.description ? `<p>${product.description}</p>` : ''}
+                                ${product.boycott_reason ? `
+                                    <div class="boycott-reason">
+                                        <strong>${product.boycott_reason.title}</strong>: ${product.boycott_reason.description}
+                                    </div>
+                                ` : ''}
+                    `;
+
+                    if (product.alternatives && product.alternatives.length > 0) {
+                        messageHTML += `
+                            <div class="alternatives-section">
+                                <div class="alternatives-title">Альтернативные продукты:</div>
+                                <div class="alternatives-list">
+                        `;
+
+                        product.alternatives.forEach(alt => {
+                            messageHTML += `
+                                <div class="alternative-item ${alt.is_kyrgyz_product ? 'kyrgyz-product' : ''}">
+                                    <div class="alternative-name">${alt.name}</div>
+                                    ${alt.is_kyrgyz_product ? '<div class="kyrgyz-badge">Местный продукт</div>' : ''}
+                                </div>
+                            `;
+                        });
+
+                        messageHTML += `
+                                </div>
+                            </div>
+                        `;
+                    }
+
+                    messageHTML += `
+                            </div>
+                        </div>
+                    `;
+                }
+
+                messageHTML += `</div>`;  // Закрываем message-content
+
+                messageElement.innerHTML = messageHTML;
+                chatMessages.appendChild(messageElement);
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+
+            function getCookie(name) {
+                let cookieValue = null;
+                if (document.cookie && document.cookie !== '') {
+                    const cookies = document.cookie.split(';');
+                    for (let i = 0; i < cookies.length; i++) {
+                        const cookie = cookies[i].trim();
+                        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                            cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                            break;
+                        }
+                    }
+                }
+                return cookieValue;
+            }
+
+            chatInput.addEventListener('keydown', function(e) {
+                if (e.key === 'Enter' && !e.shiftKey) {
+                    e.preventDefault();
+                    chatForm.requestSubmit();
+                }
+            });
+        });
+    </script>
+</body>
+</html>

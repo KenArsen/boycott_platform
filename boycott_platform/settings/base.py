@@ -171,4 +171,6 @@ MEDIA_ROOT = BASE_DIR / "media"
 
 SITE_ID = env.int("SITE_ID", default=1)
 
+OPENAI_API_KEY = env.str("OPENAI_API_KEY")
+
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"

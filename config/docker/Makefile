@@ -79,3 +79,14 @@ dump:
 .PHONY: load
 load:
 	$(DOCKER_COMPOSE) exec web python manage.py loaddata $(DIR)/fixtures/$(FILE).json
+
+
+# Полная инициализация проекта: билд, запуск, создание суперпользователя и загрузка фикстур
+.PHONY: init
+init:
+	make build
+	make up
+	make create-superuser
+	make load DIR=apps/product FILE=category
+	make load DIR=apps/product FILE=reason
+	make load DIR=apps/product FILE=product

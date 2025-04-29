@@ -1,11 +1,12 @@
 from django.conf import settings
-from langchain_community.llms.openai import OpenAI
-from langchain_community.vectorstores import Chroma
-from langchain_community.embeddings import OpenAIEmbeddings
-from langchain.text_splitter import CharacterTextSplitter
 from langchain.chains import RetrievalQA
 from langchain.schema import Document
-from apps.product.models import Product, Category, Reason
+from langchain.text_splitter import CharacterTextSplitter
+from langchain_community.embeddings import OpenAIEmbeddings
+from langchain_community.llms.openai import OpenAI
+from langchain_community.vectorstores import Chroma
+
+from apps.product.models import Product, Reason
 
 
 class ProductKnowledgeBase:
@@ -33,7 +34,7 @@ class ProductKnowledgeBase:
         documents = []
 
         # Получаем все продукты
-        products = Product.objects.all().select_related('category', 'boycott_reason')
+        products = Product.objects.all().select_related("category", "boycott_reason")
 
         for product in products:
             # Создаем документ для каждого продукта
@@ -61,12 +62,7 @@ class ProductKnowledgeBase:
                     content += f"- {alt.name} {kyrgyz_status}\n"
 
             # Создаем Document объект (не словарь)
-            documents.append(
-                Document(
-                    page_content=content,
-                    metadata={"id": product.id, "name": product.name}
-                )
-            )
+            documents.append(Document(page_content=content, metadata={"id": product.id, "name": product.name}))
 
         # Добавляем информацию о причинах бойкота
         reasons = Reason.objects.all()
@@ -81,10 +77,7 @@ class ProductKnowledgeBase:
 
             # Создаем Document объект (не словарь)
             documents.append(
-                Document(
-                    page_content=content,
-                    metadata={"id": f"reason_{reason.id}", "title": reason.title}
-                )
+                Document(page_content=content, metadata={"id": f"reason_{reason.id}", "title": reason.title})
             )
 
         return documents
@@ -102,16 +95,14 @@ class ProductKnowledgeBase:
 
         # Создаем векторное хранилище
         self.vector_store = Chroma.from_documents(
-            documents=texts,
-            embedding=self.embeddings,
-            persist_directory="./chroma_db"
+            documents=texts, embedding=self.embeddings, persist_directory="./chroma_db"
         )
 
         # Создаем цепочку для ответа на вопросы
         self.qa_chain = RetrievalQA.from_chain_type(
             llm=OpenAI(temperature=0, openai_api_key=self.api_key),
             chain_type="stuff",
-            retriever=self.vector_store.as_retriever(search_kwargs={"k": 3})
+            retriever=self.vector_store.as_retriever(search_kwargs={"k": 3}),
         )
 
     def ask(self, question):
@@ -180,7 +171,19 @@ class SimpleProductKnowledgeBase:
             for alt in alternatives:
                 response += f"- {alt.name}\n"
 
-        return response
+        product_data = {
+            "name": product.name,
+            "description": product.description,
+            "is_boycotted": product.is_boycotted,
+            "boycott_reason": (
+                {"title": product.boycott_reason.title, "description": product.boycott_reason.description}
+                if product.boycott_reason
+                else None
+            ),
+            "alternative_products": [alt.name for alt in alternatives],
+        }
+
+        return response, product_data
 
     def ask(self, question: str):
         """

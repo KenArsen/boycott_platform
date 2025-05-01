@@ -1,0 +1,52 @@
+<div class="product-card">
+    <div class="product-header">
+        {% if product.image %}
+            <img src="{{ product.image.url }}" class="product-logo" alt="{{ product.name }}">
+        {% else %}
+            <img src="/api/placeholder/50/50" class="product-logo" alt="{{ product.name }}">
+        {% endif %}
+        <div class="product-title">
+            <div class="product-name">{{ product.name }}</div>
+            <div class="product-category">Категория: {{ product.category.name }}</div>
+        </div>
+        <div class="product-rating">
+            <span class="rating-star">★</span> {{ product.get_rating }}
+        </div>
+    </div>
+    <div class="product-body">
+        <div class="product-status {% if product.is_boycotted %}status-boycotted{% else %}status-ok{% endif %}">
+            {% if product.is_boycotted %}Бойкотируется{% else %}Этичный выбор{% endif %}
+        </div>
+        {% if product.boycott_reason %}
+            <div class="product-reason"><strong>Причина:</strong> {{ product.boycott_reason.title }}</div>
+        {% endif %}
+        <div class="product-description">
+            {{ product.description }}
+        </div>
+
+        {% if product.alternative_products.exists %}
+            <div class="alternatives-title">Этичные альтернативы:</div>
+            <div class="alternatives-list">
+                {% for alt in product.alternative_products.all %}
+                    <div class="alternative-item">
+                        {% if alt.image %}
+                            <img src="{{ alt.image.url }}" class="alternative-image" alt="{{ alt.name }}">
+                        {% else %}
+                            <img src="/api/placeholder/120/80" class="alternative-image" alt="{{ alt.name }}">
+                        {% endif %}
+                        class="alternative-image" alt="{{ alt.name }}">
+                        <div class="alternative-info">
+                            <div class="alternative-name">{{ alt.name }}</div>
+                            <div class="alternative-rating">
+                                <span class="rating-star">★</span> {{ alt.get_rating }}
+                                {% if alt.is_kyrgyz_product %}
+                                    <div class="status-local" style="margin-left: 5px; font-size: 10px;">KG</div>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    </div>
+</div>

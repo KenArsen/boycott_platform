@@ -9,7 +9,10 @@ from apps.product.models import Product
 
 
 def chatbot_ui(request):
-    return render(request, "product_assistant.html")
+    return render(
+        request,
+        "boycott_assistant.html",
+    )
 
 
 @csrf_exempt
@@ -25,7 +28,6 @@ def search_product_api(request):
                 .filter(name__icontains=query)
                 .first()
             )
-            print(product)
 
             if not product:
                 return JsonResponse(

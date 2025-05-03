@@ -1,0 +1,26 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Boycott Products Platform{% endblock title %}</title>
+
+    <!-- CSS Stylesheets -->
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+
+    {% block extra_links %}{% endblock extra_links %}
+</head>
+<body>
+<!-- Заголовок и навигация -->
+{% include 'includes/header.html' %}
+
+<!-- Content block -->
+{% block content %}{% endblock content %}
+
+<!-- Футер -->
+{% include 'includes/footer.html' %}
+
+<script src="{% static 'js/main.js' %}"></script>
+</body>
+</html>

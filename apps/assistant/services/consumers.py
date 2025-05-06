@@ -5,7 +5,7 @@ import uuid
 from channels.db import database_sync_to_async
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-from .ai_response import get_ai_response
+# from .ai_response import get_ai_response
 
 logger = logging.getLogger(__name__)
 
@@ -73,7 +73,8 @@ class AIChatConsumer(AsyncWebsocketConsumer):
 
     async def _get_ai_response(self, message):
         try:
-            return await get_ai_response(message)
+            pass
+            # return await get_ai_response(message)
         except Exception as e:
             logger.error(f"Ошибка при вызове AI: {e}")
             return "Произошла ошибка при обращении к AI. Пожалуйста, попробуйте позже."

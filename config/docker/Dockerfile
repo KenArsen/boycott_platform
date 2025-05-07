@@ -46,5 +46,5 @@ COPY --from=builder /app /app
 EXPOSE 8000
 
 # Указываем команду по умолчанию (будет переопределена в docker-compose)
-#CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
-CMD ["sh", "-c", "python manage.py migrate && daphne -b 0.0.0.0 -p 8000 boycott_platform.asgi:application"]
+CMD ["sh", "-c", "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"]
+#CMD ["sh", "-c", "python manage.py migrate && daphne -b 0.0.0.0 -p 8000 boycott_platform.asgi:application"]

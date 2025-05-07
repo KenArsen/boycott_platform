@@ -3,11 +3,7 @@ services:
     build:
       context: ../..
       dockerfile: config/docker/Dockerfile
-    environment:
-      - OLLAMA_HOST=host.docker.internal:11434
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
-    command: sh -c "python manage.py migrate && daphne -b 0.0.0.0 -p 8000 boycott_platform.asgi:application"
+    command: sh -c "python manage.py migrate && python manage.py runserver 0.0.0.0:8000"
     ports:
       - "8000:8000"
     depends_on:
@@ -35,10 +31,6 @@ services:
     build:
       context: ../..
       dockerfile: config/docker/Dockerfile
-    environment:
-      - OLLAMA_HOST=host.docker.internal:11434
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
     command: celery -A boycott_platform worker -l info
     depends_on:
       - redis

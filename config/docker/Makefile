@@ -86,7 +86,7 @@ load:
 init:
 	make build
 	make up
+	make create-superuser
 	make load DIR=apps/product FILE=category
 	make load DIR=apps/product FILE=reason
 	make load DIR=apps/product FILE=product
-	make create-superuser

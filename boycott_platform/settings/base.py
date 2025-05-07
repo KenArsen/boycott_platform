@@ -22,7 +22,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # third party apps
     # local apps
-    "channels",
     "apps.core.apps.CoreConfig",
     "apps.account.apps.AccountConfig",
     "apps.product.apps.ProductConfig",
@@ -111,15 +110,6 @@ JAZZMIN_SETTINGS = {
         "auth.group": "vertical_tabs",
     },
     "language_chooser": False,
-}
-
-CHANNEL_LAYERS = {
-    "default": {
-        "BACKEND": "channels_redis.core.RedisChannelLayer",
-        "CONFIG": {
-            "hosts": [("redis", 6379)],
-        },
-    },
 }
 
 EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"

@@ -1,7 +1,8 @@
 <div class="product-card">
     <div class="product-header">
         {% if product.image %}
-            <img src="{{ product.image.url }}" class="product-logo" alt="{{ product.name }}">
+            <img src="{{ product.image.url }}" class="product-logo" alt="{{ product.name }}"
+                 title="Платформа для бойкота товаров">
         {% else %}
             <img src="/api/placeholder/50/50" class="product-logo" alt="{{ product.name }}">
         {% endif %}
@@ -30,13 +31,13 @@
                 {% for alt in product.alternative_products.all %}
                     <div class="alternative-item"
                          onclick="showAlternativeModal(
-                             '{{ alt.name }}',
+                                 '{{ alt.name }}',
                                  '{{ alt.get_rating }}',
                                  '{{ alt.is_kyrgyz_product }}',
                                  '{{ alt.category.name }}',
                                  '{{ alt.description }}',
                                  '{{ alt.is_boycotted }}',
-                                 '{{ alt.boycott_reason.title}}')">
+                                 '{{ alt.boycott_reason.title }}')">
 
                         {% if alt.image %}
                             <img src="{{ alt.image.url }}" class="alternative-image" alt="{{ alt.name }}">

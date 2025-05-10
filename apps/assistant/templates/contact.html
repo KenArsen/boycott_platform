@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Контакты - Платформа для бойкота товаров{% endblock title %}
+
+{% block content %}
+<main>
+    <div class="about-container">
+        <div class="about-header">
+            <h1>Свяжитесь с нами</h1>
+            <div class="about-subtitle">Мы всегда рады ответить на ваши вопросы</div>
+        </div>
+
+        <div class="about-content">
+            <div class="about-section">
+                <div class="about-section-title">
+                    <h2>Контакты</h2>
+                </div>
+                <div class="about-text">
+                    <p>Telegram: <a href="https://t.me/kenzhegulov_02" target="_blank">@kenzhegulov_02</a></p>
+                    <p>Instagram: <a href="https://www.instagram.com/kenzhegulov_02" target="_blank">kenzhegulov_02</a>
+                    </p>
+                    <p>Email: <a href="mailto:2004.01033@manas.edu.kg">2004.01033@manas.edu.kg</a></p>
+                </div>
+            </div>
+
+            <div class="about-section">
+                <div class="about-section-title">
+                    <h2>Отправьте нам сообщение</h2>
+                </div>
+                <div class="about-text">
+                    <form id="contact-form">
+                        <div class="form-group">
+                            <label for="name">Ваше имя:</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Ваш Email:</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Сообщение:</label>
+                            <textarea id="message" name="message" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">Отправить</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+{% endblock content %}

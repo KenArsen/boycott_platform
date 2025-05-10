@@ -330,3 +330,211 @@ document.head.insertAdjacentHTML('beforeend', `
     }
 </style>
 `);
+
+
+// База знаний о проекте для чат-бота
+const knowledgeBase = {
+    // Общая информация о проекте
+    project: {
+        name: "Альтернатива",
+        description: "Платформа для управления бойкотируемыми товарами и предоставления альтернативных продуктов местного производства.",
+        mission: "Поддержка осознанного потребления и помощь людям в принятии этических решений при выборе товаров.",
+        created: "Кыргызско-Турецким университетом Манаса",
+        year: "2023",
+        location: "Бишкек, Кыргызстан"
+    },
+
+    // Информация о функциях платформы
+    features: {
+        search: "Поиск информации о продуктах и их статусе (бойкотируется или нет)",
+        alternatives: "Предложение этичных альтернатив для бойкотируемых товаров",
+        local: "Приоритет товарам местного производства, которые отмечены значком 'KG'",
+        ratings: "Рейтинговая система для оценки продуктов пользователями",
+        categories: "Разделение товаров по категориям для удобного поиска"
+    },
+
+    // Критерии бойкота
+    boycottCriteria: [
+        "Поддержка военных действий",
+        "Нарушение прав человека",
+        "Негативное влияние на окружающую среду",
+        "Использование неэтичных практик в производстве",
+        "Эксплуатация водных и других природных ресурсов"
+    ],
+
+    // Часто задаваемые вопросы
+    faq: {
+        "Что такое бойкот?": "Бойкот — это форма протеста, при которой люди отказываются покупать товары или услуги определенного производителя из-за несогласия с его политикой или действиями.",
+        "Как определяется, что товар нужно бойкотировать?": "Решение о включении товара в список бойкотируемых принимается на основе проверенной информации о нарушениях компании по нашим этическим критериям.",
+        "Как я могу предложить добавить товар в список бойкотируемых?": "Вы можете отправить нам информацию через форму обратной связи с указанием продукта и причины, по которой его следует бойкотировать, приложив подтверждающие источники.",
+        "Что означает значок 'KG'?": "Значок 'KG' указывает на то, что продукт произведен в Кыргызстане, что помогает поддерживать местных производителей."
+    },
+
+
+    // Контактная информация
+    contact: {
+        email: "info@alternative.kg",
+        phone: "+996 555 123456",
+        address: "г. Бишкек, Кыргызско-Турецкий университет Манаса"
+    }
+};
+
+// Функция для добавления сообщения в чат
+function addMessage(content, isUser) {
+    const chatMessages = document.getElementById('about-chat-messages');
+    const messageDiv = document.createElement('div');
+    messageDiv.classList.add('message');
+    messageDiv.classList.add(isUser ? 'user-message' : 'ai-message');
+    messageDiv.innerHTML = content;
+    chatMessages.appendChild(messageDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+}
+
+// Функция для генерации ответа на вопрос пользователя
+function generateResponse(query) {
+    // Приводим запрос к нижнему регистру для поиска ключевых слов
+    const lowerQuery = query.toLowerCase();
+
+    // Проверяем наличие ключевых слов и возвращаем соответствующие ответы
+
+    // Приветствия
+    if (lowerQuery.includes('привет') || lowerQuery.includes('здравствуй') || lowerQuery.includes('добрый день')) {
+        return 'Здравствуйте! Рад помочь вам узнать больше о проекте "Альтернатива". Что именно вас интересует?';
+    }
+
+    // О проекте
+    if (lowerQuery.includes('о проект') || lowerQuery.includes('что такое альтернатива') || lowerQuery.includes('расскаж') && lowerQuery.includes('проект')) {
+        return `"${knowledgeBase.project.name}" - это ${knowledgeBase.project.description} Наша миссия - ${knowledgeBase.project.mission} Проект был создан ${knowledgeBase.project.created} в ${knowledgeBase.project.year} году.`;
+    }
+
+    // О миссии
+    if (lowerQuery.includes('цель') || lowerQuery.includes('миссия')) {
+        return `Наша миссия - ${knowledgeBase.project.mission} Мы стремимся обеспечить пользователей достоверной информацией о бойкотируемых продуктах и предложить качественные альтернативы, отдавая предпочтение товарам местного производства.`;
+    }
+
+    // О критериях бойкота
+    if (lowerQuery.includes('критери') || lowerQuery.includes('причин') && (lowerQuery.includes('бойкот') || lowerQuery.includes('отказ'))) {
+        return `Мы оцениваем продукты по следующим этическим критериям:<br>
+                <ul class="about-list" style="margin-top: 8px;">
+                ${knowledgeBase.boycottCriteria.map(criterion => `<li>${criterion}</li>`).join('')}
+                </ul>`;
+    }
+
+    // О функциях платформы
+    if (lowerQuery.includes('функции') || lowerQuery.includes('что умеет') || lowerQuery.includes('возможности')) {
+        return `Наша платформа предлагает следующие функции:<br>
+                <ul class="about-list" style="margin-top: 8px;">
+                <li>Поиск информации о продуктах и их статусе</li>
+                <li>Предложение этичных альтернатив</li>
+                <li>Приоритет товарам местного производства (со значком "KG")</li>
+                <li>Рейтинговая система для оценки продуктов</li>
+                <li>Удобное разделение по категориям</li>
+                </ul>`;
+    }
+
+
+    // FAQ - вопросы из базы знаний
+    for (const [question, answer] of Object.entries(knowledgeBase.faq)) {
+        if (lowerQuery.includes(question.toLowerCase())) {
+            return answer;
+        }
+    }
+
+    // О значке KG
+    if (lowerQuery.includes('kg') || lowerQuery.includes('кыргыз') || (lowerQuery.includes('местн') && lowerQuery.includes('продукт'))) {
+        return `Значок "KG" указывает на то, что продукт произведен в Кыргызстане. Мы отдаем приоритет местным производителям, чтобы поддержать экономику страны и сократить углеродный след от транспортировки товаров.`;
+    }
+
+    // О рейтинге
+    if (lowerQuery.includes('рейтинг') || lowerQuery.includes('оценк') || lowerQuery.includes('звезд')) {
+        return `Рейтинговая система нашей платформы позволяет пользователям оценивать продукты по пятибалльной шкале. Рейтинг отображается в виде звезд. Чем выше рейтинг, тем лучше продукт оценен нашим сообществом.`;
+    }
+
+    // Контакты
+    if (lowerQuery.includes('контакт') || lowerQuery.includes('связ') || lowerQuery.includes('почта') || lowerQuery.includes('телефон')) {
+        return `Вы можете связаться с нами:<br>
+                Email: ${knowledgeBase.contact.email}<br>
+                Телефон: ${knowledgeBase.contact.phone}<br>
+                Адрес: ${knowledgeBase.contact.address}`;
+    }
+
+    // Как пользоваться
+    if (lowerQuery.includes('как пользоваться') || lowerQuery.includes('инструкция') || lowerQuery.includes('как работает')) {
+        return `Чтобы воспользоваться нашей платформой:<br>
+                1. Введите название интересующего вас продукта в поисковую строку.<br>
+                2. Ознакомьтесь с информацией о статусе продукта (бойкотируется или нет).<br>
+                3. Если продукт бойкотируется, изучите предложенные альтернативы.<br>
+                4. Обратите внимание на товары со значком "KG" - это местные продукты.`;
+    }
+
+    // Как добавить продукт
+    if ((lowerQuery.includes('добавить') || lowerQuery.includes('предложить')) && lowerQuery.includes('продукт')) {
+        return `Чтобы предложить добавить новый продукт или обновить информацию о существующем, пожалуйста, свяжитесь с нами по email: ${knowledgeBase.contact.email}. Укажите название продукта, производителя и, если это предложение для бойкота, приложите подтверждающие источники о нарушениях.`;
+    }
+
+    // Общий ответ при отсутствии совпадений
+    return `Спасибо за ваш вопрос! Я постараюсь на него ответить.<br><br>
+            Платформа "Альтернатива" помогает пользователям делать осознанный выбор товаров, предоставляя информацию о бойкотируемых продуктах и их этичных альтернативах.<br><br>
+            Если я не ответил на ваш вопрос, вы можете связаться с нами напрямую по email: ${knowledgeBase.contact.email}`;
+}
+
+// Обработчик отправки сообщения
+document.addEventListener('DOMContentLoaded', function () {
+    const chatButton = document.getElementById('about-chat-button');
+    const chatInput = document.getElementById('about-chat-input');
+
+    if (chatButton && chatInput) {
+        // Функция отправки сообщения
+        function sendMessage() {
+            const message = chatInput.value.trim();
+
+            if (message) {
+                // Добавляем сообщение пользователя
+                addMessage(message, true);
+
+                // Очищаем поле ввода
+                chatInput.value = '';
+
+                // Имитация задержки ответа (для естественности)
+                setTimeout(function () {
+                    // Генерируем и добавляем ответ
+                    const response = generateResponse(message);
+                    addMessage(response, false);
+                }, 500);
+            }
+        }
+
+        // Обработчик клика на кнопку отправки
+        chatButton.addEventListener('click', sendMessage);
+
+        // Обработчик нажатия клавиши Enter в поле ввода
+        chatInput.addEventListener('keypress', function (e) {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+    }
+    const contactForm = document.getElementById('contact-form');
+
+    if (contactForm) {
+        contactForm.addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            if (name === '' || email === '' || message === '') {
+                alert('Все поля должны быть заполнены!');
+                return;
+            }
+
+            console.log('Имя:', name);
+            console.log('Email:', email);
+            console.log('Сообщение:', message);
+
+            alert('Ваше сообщение отправлено!');
+            contactForm.reset();
+        });
+    }
+});

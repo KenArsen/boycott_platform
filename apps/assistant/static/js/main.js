@@ -184,29 +184,149 @@ function getCookie(name) {
     return cookieValue;
 }
 
-function showAlternativeModal(name, rating, isKyrgyzProduct, category, description, isBoycotted, boycottReason) {
+
+// Функция для отображения модального окна с информацией о продукте
+function showAlternativeModal(name, image, rating, isKyrgyzProduct, category, description, isBoycotted, boycottReason) {
+    // Установка основной информации
     document.getElementById("modal-alt-name").innerText = name;
     document.getElementById("modal-alt-rating").innerText = rating;
-    document.getElementById("modal-alt-country").innerText = isKyrgyzProduct === "True" ? "Кыргызстан" : "Зарубежный";
-    document.getElementById("modal-alt-category").innerText = category;
-    document.getElementById("modal-alt-description").innerText = description;
-    document.getElementById("modal-alt-status").innerText = isBoycotted === "True" ? "Бойкотируется" : "Этичный выбор";
-    document.getElementById("modal-alt-reason").innerText = boycottReason || "—";
+    document.getElementById("modal-alt-category").innerText = category || "Неизвестно";
+    document.getElementById("modal-alt-description").innerText = description || "Информация отсутствует";
 
-    document.getElementById("alternative-modal").style.display = "block";
+    // Установка изображения (добавлено)
+    const imageElement = document.getElementById("modal-alt-image");
+    if (image && image !== 'undefined' && !image.includes('undefined')) {
+        imageElement.src = image;
+    } else {
+        imageElement.src = "/api/placeholder/200/150"; // Запасное изображение
+    }
+
+    // Установка статуса продукта (бойкотируется или этичный)
+    const statusBadge = document.getElementById("modal-alt-status-badge");
+    const statusText = document.getElementById("modal-alt-status");
+
+    if (isBoycotted === "True") {
+        statusBadge.className = "modal-status boycotted";
+        statusText.innerText = "Бойкотируется";
+
+        // Показываем причину бойкота
+        const reasonContainer = document.getElementById("modal-alt-reason-container");
+        document.getElementById("modal-alt-reason").innerText = boycottReason || "Причина не указана";
+        reasonContainer.classList.remove("modal-reason-hidden");
+    } else {
+        statusBadge.className = "modal-status ethical";
+        statusText.innerText = "Этичный выбор";
+
+        // Скрываем причину бойкота
+        document.getElementById("modal-alt-reason-container").classList.add("modal-reason-hidden");
+    }
+
+    // Установка информации о стране производства
+    const countryBadge = document.getElementById("modal-alt-country-badge");
+    const countryText = document.getElementById("modal-alt-country");
+
+    if (isKyrgyzProduct === "True") {
+        countryBadge.style.backgroundColor = "#e3f2fd";
+        countryBadge.style.color = "#1565c0";
+        countryText.innerText = "Кыргызстан";
+    } else {
+        countryBadge.style.backgroundColor = "#f0f0f0";
+        countryBadge.style.color = "#666";
+        countryText.innerText = "Зарубежный";
+    }
+
+    // Показываем модальное окно с плавной анимацией
+    const modal = document.getElementById("alternative-modal");
+    modal.style.display = "block";
+
+    // Добавляем обработчик для закрытия по клику вне содержимого
+    modal.addEventListener("click", function (event) {
+        if (event.target === modal) {
+            closeModal();
+        }
+    });
+
+    // Добавляем обработчик для закрытия по Escape
+    document.addEventListener("keydown", handleEscKey);
 }
 
+// Функция закрытия модального окна
 function closeModal() {
-    document.getElementById("alternative-modal").style.display = "none";
+    const modal = document.getElementById("alternative-modal");
+
+    // Плавное скрытие
+    modal.style.opacity = "0";
+
+    setTimeout(() => {
+        modal.style.display = "none";
+        modal.style.opacity = "1";
+    }, 300);
+
+    // Удаляем обработчик Escape
+    document.removeEventListener("keydown", handleEscKey);
 }
 
+// Обработчик нажатия клавиши Escape
+function handleEscKey(event) {
+    if (event.key === "Escape") {
+        closeModal();
+    }
+}
+
+// Функция поиска альтернативного продукта
 function searchAlternative() {
     const name = document.getElementById("modal-alt-name").innerText;
     closeModal();
 
-    // Имитируем поиск как обычный ввод
+    // Имитируем поиск как обычный ввод с небольшой задержкой
     addMessage(name, true);
+
+    // Добавляем индикатор загрузки
+    const chatMessages = document.querySelector('.chat-messages');
+    const loadingDiv = document.createElement('div');
+    loadingDiv.classList.add('message', 'ai-message');
+    loadingDiv.innerHTML = '<div style="display: flex; align-items: center;"><span style="margin-right: 10px;">Поиск</span><div class="loading-dots"><span>.</span><span>.</span><span>.</span></div></div>';
+    chatMessages.appendChild(loadingDiv);
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+
+    // Выполняем поиск
     setTimeout(() => {
+        chatMessages.removeChild(loadingDiv);
         searchProduct(name);
-    }, 300);
+    }, 800);
 }
+
+// Стили для анимации загрузки
+document.head.insertAdjacentHTML('beforeend', `
+<style>
+    .loading-dots {
+        display: inline-flex;
+    }
+    
+    .loading-dots span {
+        animation: loadingDots 1.4s infinite ease-in-out both;
+        margin: 0 2px;
+    }
+    
+    .loading-dots span:nth-child(1) {
+        animation-delay: 0s;
+    }
+    
+    .loading-dots span:nth-child(2) {
+        animation-delay: 0.2s;
+    }
+    
+    .loading-dots span:nth-child(3) {
+        animation-delay: 0.4s;
+    }
+    
+    @keyframes loadingDots {
+        0%, 80%, 100% { 
+            opacity: 0;
+        }
+        40% { 
+            opacity: 1;
+        }
+    }
+</style>
+`);

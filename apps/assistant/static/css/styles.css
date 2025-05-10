@@ -315,101 +315,158 @@ footer {
     font-weight: bold;
 }
 
-/* Модальное окно */
-.modal {
+/* Улучшенные стили для модального окна */
+#alternative-modal {
     display: none;
     position: fixed;
-    z-index: 100;
-    left: 0;
     top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
-    background-color: rgba(0, 0, 0, 0.5);
+    background-color: rgba(0, 0, 0, 0.7);
+    z-index: 999;
+    animation: fadeIn 0.3s ease-in-out;
 }
 
-.modal-content {
-    background-color: #fff;
-    margin: 5% auto;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
-    width: 80%;
-    max-width: 700px;
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.modal-container {
+    background-color: white;
+    max-width: 550px;
+    width: 90%;
+    margin: 8% auto;
+    border-radius: 12px;
+    box-shadow: 0 5px 30px rgba(0, 0, 0, 0.3);
+    overflow: hidden;
     position: relative;
-    animation: modalFadeIn 0.3s;
+    animation: slideDown 0.4s ease-out;
 }
 
-@keyframes modalFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
+@keyframes slideDown {
+    from { transform: translateY(-50px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }
 
-.close-modal {
+.modal-close-btn {
     position: absolute;
+    top: 15px;
     right: 15px;
-    top: 10px;
-    font-size: 24px;
-    font-weight: bold;
-    color: #aaa;
+    background: rgba(255, 255, 255, 0.2);
+    color: #333;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
+    font-size: 18px;
+    transition: all 0.2s;
+    border: none;
 }
 
-.close-modal:hover {
-    color: #333;
+.modal-close-btn:hover {
+    background: rgba(0, 0, 0, 0.1);
+    transform: rotate(90deg);
 }
 
 .modal-header {
     display: flex;
-    align-items: center;
-    margin-bottom: 15px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #eee;
+    align-items: flex-start;
+    padding: 20px 20px 15px;
+    border-bottom: 1px solid #f0f0f0;
+    position: relative;
 }
 
 .modal-product-image {
     width: 80px;
     height: 80px;
-    border-radius: 8px;
-    margin-right: 15px;
+    border-radius: 10px;
     object-fit: cover;
+    margin-right: 15px;
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.1);
 }
 
 .modal-product-info {
-    flex-grow: 1;
+    flex: 1;
+}
+
+.modal-product-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 5px;
 }
 
 .modal-product-name {
     font-size: 22px;
     font-weight: bold;
-    margin-bottom: 5px;
+    color: #1a365d;
+    margin-right: 10px;
 }
 
-.modal-product-category {
-    font-size: 14px;
-    color: #666;
-    margin-bottom: 5px;
+.modal-product-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 5px;
 }
 
-.modal-product-rating {
+.modal-rating {
     display: inline-flex;
     align-items: center;
     background-color: #1a365d;
     color: white;
-    padding: 4px 10px;
-    border-radius: 15px;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.modal-country {
+    display: inline-flex;
+    align-items: center;
+    background-color: #e3f2fd;
+    color: #1565c0;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 13px;
+}
+
+.modal-category {
+    color: #666;
     font-size: 14px;
+    margin-top: 3px;
+}
+
+.modal-status-container {
+    margin-top: 10px;
+}
+
+.modal-status {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 12px;
+    font-size: 13px;
     font-weight: bold;
 }
 
+.modal-status.boycotted {
+    background-color: #ffebee;
+    color: #d32f2f;
+}
+
+.modal-status.ethical {
+    background-color: #e8f5e9;
+    color: #2e7d32;
+}
+
 .modal-body {
-    margin-bottom: 20px;
+    padding: 15px 20px;
 }
 
 .modal-section {
@@ -419,7 +476,125 @@ footer {
 .modal-section-title {
     font-size: 16px;
     font-weight: bold;
+    color: #1a365d;
     margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+}
+
+.modal-section-title:before {
+    content: '';
+    display: inline-block;
+    width: 4px;
+    height: 16px;
+    background-color: #1a365d;
+    margin-right: 8px;
+    border-radius: 2px;
+}
+
+.modal-description {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #444;
+    background-color: #f9f9f9;
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 3px solid #1a365d;
+}
+
+.modal-reason {
+    font-size: 14px;
+    line-height: 1.5;
+    color: #d32f2f;
+    background-color: #ffebee;
+    padding: 12px;
+    border-radius: 8px;
+    border-left: 3px solid #d32f2f;
+    margin-top: 10px;
+}
+
+.modal-reason-hidden {
+    display: none;
+}
+
+.modal-footer {
+    padding: 15px 20px;
+    background-color: #f8f8f8;
+    border-top: 1px solid #f0f0f0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.modal-btn {
+    padding: 10px 20px;
+    border-radius: 25px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.2s;
+    border: none;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+}
+
+.modal-btn-search {
+    background-color: #1a365d;
+    color: white;
+}
+
+.modal-btn-search:hover {
+    background-color: #0d2b4d;
+    transform: translateY(-2px);
+    box-shadow: 0 3px 8px rgba(0, 0, 0, 0.2);
+}
+
+.modal-btn-close {
+    background-color: #f0f0f0;
+    color: #333;
+}
+
+.modal-btn-close:hover {
+    background-color: #e0e0e0;
+}
+
+.modal-btn-icon {
+    margin-right: 8px;
+}
+
+/* Для адаптивности на мобильных устройствах */
+@media (max-width: 600px) {
+    .modal-container {
+        width: 95%;
+        margin: 10% auto;
+    }
+
+    .modal-header {
+        flex-direction: column;
+    }
+
+    .modal-product-image {
+        margin-bottom: 15px;
+        margin-right: 0;
+        align-self: center;
+        width: 100px;
+        height: 100px;
+    }
+
+    .modal-product-title {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .modal-footer {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .modal-btn {
+        width: 100%;
+        justify-content: center;
+    }
 }
 
 .tag-list {

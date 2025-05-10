@@ -91,6 +91,16 @@ class QueryEngine:
     """Engine for processing and responding to user queries using the product database"""
 
     @staticmethod
+    def response_ai(query: str):
+        return client.chat.completions.create(
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": "Вы - помощник по бойкоту товаров."},
+                {"role": "user", "content": query},
+            ],
+        )
+
+    @staticmethod
     def generate_response(query: str) -> Dict[str, Any]:
         """Generate a response to a user query"""
         # First, try keyword search

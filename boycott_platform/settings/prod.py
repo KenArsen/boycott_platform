@@ -1,5 +1,3 @@
-import dj_database_url
-
 from .base import *
 
 DEBUG = env.bool("DEBUG", default=False)
@@ -7,8 +5,6 @@ DEBUG = env.bool("DEBUG", default=False)
 ALLOWED_HOSTS = env.list("ALLOWED_HOSTS", default=["yourdomain.com", "www.yourdomain.com"])
 
 DOMAIN = env.str("DOMAIN", default="https://boycott.com")
-
-DATABASES = {"default": dj_database_url.parse(env.str("DATABASE_URL"))}
 
 TIME_ZONE = env.str("TIME_ZONE", default="UTC")
 

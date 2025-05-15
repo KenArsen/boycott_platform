@@ -1,5 +1,6 @@
 from pathlib import Path
 
+import dj_database_url
 from django.conf.locale import LANG_INFO
 from django.utils.translation import gettext_lazy as _
 
@@ -65,6 +66,8 @@ AUTH_PASSWORD_VALIDATORS = [
     {"NAME": "django.contrib.auth.password_validation.CommonPasswordValidator"},
     {"NAME": "django.contrib.auth.password_validation.NumericPasswordValidator"},
 ]
+
+DATABASES = {"default": dj_database_url.parse(env.str("DATABASE_URL"))}
 
 JAZZMIN_SETTINGS = {
     "site_title": "Boycott Admin",

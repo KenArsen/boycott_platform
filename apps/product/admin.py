@@ -114,12 +114,6 @@ class ProductAdmin(TranslationAdmin):
     def has_delete_permission(self, request, obj=None):
         return request.user.is_superuser  # Только суперпользователи могут удалять
 
-    def has_change_permission(self, request, obj=None):
-        return request.user.is_superuser or request.user.is_moderator()  # Модераторы могут редактировать
-
-    def has_view_permission(self, request, obj=None):
-        return request.user.is_superuser or request.user.is_moderator()  # Модераторы могут просматривать
-
     def mark_as_boycotted(self, request, queryset):
         """Массово помечает товары как бойкотируемые"""
         updated = queryset.update(is_boycotted=True)

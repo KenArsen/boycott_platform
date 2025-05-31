@@ -1,81 +1,125 @@
-<div class="product-card">
-    <div class="product-header">
-        {% if product.image %}
-            <img src="{{ product.image.url }}" class="product-logo" alt="{{ product.name }}"
-                 title="Платформа для бойкота товаров">
-        {% else %}
-            <img src="/api/placeholder/50/50" class="product-logo" alt="{{ product.name }}">
-        {% endif %}
-        <div class="product-title">
-            <div class="product-name">{{ product.name }}</div>
-            <div class="product-category">Категория: {{ product.category.name }}</div>
+{% for product in products %}
+    <div class="product-card">
+        <div class="product-header">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" class="product-logo" alt="{{ product.name }}"
+                     title="Платформа для бойкота товаров">
+            {% else %}
+                <img src="/api/placeholder/50/50" class="product-logo" alt="{{ product.name }}">
+            {% endif %}
+            <div class="product-title">
+                <div class="product-name">{{ product.name }}</div>
+                <div class="product-category">Категория: {{ product.category.name }}</div>
+            </div>
+            <div class="product-rating">
+                <span class="rating-star">★</span> {{ product.get_rating }}
+            </div>
         </div>
-        <div class="product-rating">
-            <span class="rating-star">★</span> {{ product.get_rating }}
-        </div>
-    </div>
-    <div class="product-body">
-        <div class="product-status {% if product.is_boycotted %}status-boycotted{% else %}status-ok{% endif %}">
-            {% if product.is_boycotted %}Бойкотируется{% else %}Этичный выбор{% endif %}
-        </div>
-        {% if product.boycott_reason %}
-            <div class="product-reason"><strong>Причина:</strong> {{ product.boycott_reason.title }}</div>
-        {% endif %}
-        <div class="product-description">
-            {{ product.description }}
-        </div>
+        <div class="product-body">
+            <div class="product-status {% if product.is_boycotted %}status-boycotted{% else %}status-ok{% endif %}">
+                {% if product.is_boycotted %}Бойкотируется{% else %}Этичный выбор{% endif %}
+            </div>
+            {% if product.boycott_reason %}
+                <div class="product-reason"><strong>Причина:</strong> {{ product.boycott_reason.title }}</div>
+            {% endif %}
+            <div class="product-description">
+                {{ product.description }}
+            </div>
 
-        {% if product.alternative_products.exists %}
-            <div class="alternatives-title">Этичные альтернативы:</div>
-            <div class="alternatives-list">
-                {% for alt in product.alternative_products.all %}
-                    <div class="alternative-item"
-                         onclick="showAlternativeModal(
-                                 '{{ alt.name }}',
-                                 '{{ alt.get_rating }}',
-                                 '{{ alt.is_kyrgyz_product }}',
-                                 '{{ alt.category.name }}',
-                                 '{{ alt.description }}',
-                                 '{{ alt.is_boycotted }}',
-                                 '{{ alt.boycott_reason.title }}')">
+            {% if product.alternative_products.exists %}
+                <div class="alternatives-title">Этичные альтернативы:</div>
+                <div class="alternatives-list">
+                    {% for alt in product.alternative_products.all %}
+                        <div class="alternative-item"
+                             onclick="showAlternativeModal(
+                                     '{{ alt.name }}',
+                                     '{{ alt.image.url }}',
+                                     '{{ alt.get_rating }}',
+                                     '{{ alt.is_kyrgyz_product }}',
+                                     '{{ alt.category.name }}',
+                                     '{{ alt.description }}',
+                                     '{{ alt.is_boycotted }}',
+                                     '{{ alt.boycott_reason.title }}')">
 
-                        {% if alt.image %}
-                            <img src="{{ alt.image.url }}" class="alternative-image" alt="{{ alt.name }}">
-                        {% else %}
-                            <img src="/api/placeholder/120/80" class="alternative-image" alt="{{ alt.name }}">
-                        {% endif %}
-                        <div class="alternative-info">
-                            <div class="alternative-name">{{ alt.name }}</div>
-                            <div class="alternative-rating">
-                                <span class="rating-star">★</span> {{ alt.get_rating }}
-                                {% if alt.is_kyrgyz_product %}
-                                    <div class="status-local" style="margin-left: 5px; font-size: 10px;">KG</div>
-                                {% endif %}
+                            {% if alt.image %}
+                                <img src="{{ alt.image.url }}" class="alternative-image" alt="{{ alt.name }}">
+                            {% else %}
+                                <img src="/api/placeholder/120/80" class="alternative-image" alt="{{ alt.name }}">
+                            {% endif %}
+                            <div class="alternative-info">
+                                <div class="alternative-name">{{ alt.name }}</div>
+                                <div class="alternative-rating">
+                                    <span class="rating-star">★</span> {{ alt.get_rating }}
+                                    {% if alt.is_kyrgyz_product %}
+                                        <div class="status-local" style="margin-left: 5px; font-size: 10px;">KG</div>
+                                    {% endif %}
+                                </div>
                             </div>
                         </div>
-                    </div>
-                {% endfor %}
-            </div>
-        {% endif %}
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </div>
     </div>
-</div>
+{% endfor %}
 
-<!-- Модальное окно -->
-<div id="alternative-modal"
-     style="display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.6); z-index: 999;">
-    <div style="background-color: white; margin: 10% auto; padding: 20px; max-width: 400px; border-radius: 10px; position: relative;">
-        <span onclick="closeModal()"
-              style="position: absolute; top: 10px; right: 15px; cursor: pointer; font-weight: bold;">✕</span>
-        <h3 id="modal-alt-name">Альтернатива</h3>
-        <p><strong>Рейтинг:</strong> <span id="modal-alt-rating">—</span></p>
-        <p><strong>Производство:</strong> <span id="modal-alt-country">—</span></p>
-        <p><strong>Категория:</strong> <span id="modal-alt-category">—</span></p>
-        <p><strong>Описание:</strong> <span id="modal-alt-description">—</span></p>
-        <p><strong>Статус:</strong> <span id="modal-alt-status">—</span></p>
-        <p><strong>Причина бойкота:</strong> <span id="modal-alt-reason">—</span></p>
-        <button onclick="searchAlternative()"
-                style="margin-top: 10px; padding: 8px 15px; border: none; background-color: #1a365d; color: white; border-radius: 5px; cursor: pointer;">
-            Найти
-        </button>
+<!-- Модальное окно для альтернативных продуктов -->
+<div id="alternative-modal">
+    <div class="modal-container">
+        <button class="modal-close-btn" onclick="closeModal()">✕</button>
+
+        <div class="modal-header">
+            <img id="modal-alt-image" alt="Продукт" class="modal-product-image">
+
+            <div class="modal-product-info">
+                <div class="modal-product-title">
+                    <h3 id="modal-alt-name" class="modal-product-name">Название продукта</h3>
+                </div>
+
+                <div class="modal-product-meta">
+                    <div class="modal-rating">
+                        <span class="rating-star">★</span>
+                        <span id="modal-alt-rating">4.5</span>
+                    </div>
+
+                    <div class="modal-country" id="modal-alt-country-badge">
+                        <span id="modal-alt-country">Кыргызстан</span>
+                    </div>
+                </div>
+
+                <div class="modal-category">
+                    Категория: <span id="modal-alt-category">Напитки</span>
+                </div>
+
+                <div class="modal-status-container">
+                    <div id="modal-alt-status-badge" class="modal-status ethical">
+                        <span id="modal-alt-status">Этичный выбор</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-body">
+            <div class="modal-section">
+                <div class="modal-section-title">О продукте</div>
+                <div id="modal-alt-description" class="modal-description">
+                    Описание продукта будет здесь...
+                </div>
+
+                <div id="modal-alt-reason-container" class="modal-reason modal-reason-hidden">
+                    <strong>Причина бойкота:</strong> <span id="modal-alt-reason">—</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button class="modal-btn modal-btn-close" onclick="closeModal()">
+                <span class="modal-btn-icon">←</span> Закрыть
+            </button>
+
+            <button class="modal-btn modal-btn-search" onclick="searchAlternative()">
+                <span class="modal-btn-icon">🔍</span> Найти
+            </button>
+        </div>
     </div>
 </div>

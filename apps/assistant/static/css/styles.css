@@ -239,6 +239,69 @@ main {
     margin-bottom: 10px;
 }
 
+/* Обновленные стили для AI сообщения */
+.ai-message-container {
+    margin: 20px 0;
+    padding: 10px;
+}
+
+.api-message-box {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-left: 3px solid #1a365d;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 12px 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #444;
+    position: relative;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+}
+
+.api-message-box::before {
+    content: "🤖";
+    position: absolute;
+    top: 8px;
+    left: -12px;
+    background-color: #1a365d;
+    color: white;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.api-message-box p {
+    margin: 0;
+    padding-left: 15px;
+}
+
+.api-message-box strong {
+    color: #1a365d;
+}
+
+/* Альтернативный стиль - более минималистичный */
+.api-message-box.minimal {
+    background-color: #f9f9f9;
+    border: 1px solid #e0e0e0;
+    border-left: 3px solid #1a365d;
+    border-radius: 8px;
+    padding: 12px;
+    margin: 10px 0;
+    font-size: 14px;
+    line-height: 1.5;
+    color: #444;
+}
+
+.api-message-box.minimal::before {
+    display: none;
+}
+
 /* Стили для альтернатив */
 .alternatives-title {
     font-size: 16px;
@@ -294,17 +357,6 @@ main {
     color: #1a365d;
     display: flex;
     align-items: center;
-}
-
-/* Подвал сайта */
-footer {
-    background-color: #1a365d;
-    color: white;
-    text-align: center;
-    padding: 15px 0;
-    font-size: 14px;
-    flex-shrink: 0; /* Prevents the footer from shrinking */
-    width: 100%;
 }
 
 /* Индикатор бойкота */
@@ -519,6 +571,7 @@ footer {
     padding: 12px;
     border-radius: 8px;
     border-left: 3px solid #1a365d;
+    margin-bottom: 15px;
 }
 
 .modal-reason {
@@ -581,41 +634,6 @@ footer {
     margin-right: 8px;
 }
 
-/* Для адаптивности на мобильных устройствах */
-@media (max-width: 600px) {
-    .modal-container {
-        width: 95%;
-        margin: 10% auto;
-    }
-
-    .modal-header {
-        flex-direction: column;
-    }
-
-    .modal-product-image {
-        margin-bottom: 15px;
-        margin-right: 0;
-        align-self: center;
-        width: 100px;
-        height: 100px;
-    }
-
-    .modal-product-title {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .modal-footer {
-        flex-direction: column;
-        gap: 10px;
-    }
-
-    .modal-btn {
-        width: 100%;
-        justify-content: center;
-    }
-}
-
 .tag-list {
     display: flex;
     flex-wrap: wrap;
@@ -630,18 +648,6 @@ footer {
     font-weight: bold;
     background-color: #e8f5e9;
     color: #2e7d32;
-}
-
-.modal-description {
-    line-height: 1.5;
-    margin-bottom: 15px;
-}
-
-.modal-footer {
-    display: flex;
-    justify-content: flex-end;
-    padding-top: 15px;
-    border-top: 1px solid #eee;
 }
 
 .btn {
@@ -664,99 +670,15 @@ footer {
     color: #333;
 }
 
-.nutrition-info {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-bottom: 15px;
-}
-
-.nutrition-item {
-    background-color: #f9f9f9;
-    padding: 8px 12px;
-    border-radius: 8px;
-    font-size: 13px;
-}
-
-.availability-section {
-    margin-top: 15px;
-}
-
-.store-list {
-    display: flex;
-    overflow-x: auto;
-    gap: 10px;
-    margin-top: 10px;
-    padding-bottom: 5px;
-}
-
-.store-item {
-    min-width: 120px;
-    border: 1px solid #eee;
-    border-radius: 8px;
-    padding: 8px;
+/* Подвал сайта */
+footer {
+    background-color: #1a365d;
+    color: white;
     text-align: center;
-}
-
-.store-name {
-    font-weight: bold;
-    margin-bottom: 3px;
-}
-
-.store-price {
-    color: #2e7d32;
-    font-weight: bold;
-}
-
-
-@keyframes modalFadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(-30px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Адаптивность для мобильных устройств */
-@media (max-width: 768px) {
-    .header-container {
-        flex-direction: column;
-        text-align: center;
-    }
-
-    .nav-menu {
-        margin-top: 15px;
-        justify-content: center;
-    }
-
-    .nav-menu li {
-        margin: 0 10px;
-    }
-
-    main {
-        margin: 20px auto;
-    }
-
-    .product-card {
-        max-width: 100%;
-    }
-
-    .modal-content {
-        width: 95%;
-        margin: 10% auto;
-    }
-
-    .modal-header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-
-    .modal-product-image {
-        margin-bottom: 10px;
-    }
+    padding: 15px 0;
+    font-size: 14px;
+    flex-shrink: 0; /* Prevents the footer from shrinking */
+    width: 100%;
 }
 
 /* Стили для страницы "О нас" */
@@ -938,55 +860,7 @@ footer {
     height: 400px;
 }
 
-/* Адаптация для мобильных устройств */
-@media (max-width: 768px) {
-    .about-header h1 {
-        font-size: 28px;
-    }
-
-    .about-subtitle {
-        font-size: 16px;
-    }
-
-    .team-grid {
-        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
-    }
-
-    .partners-grid {
-        gap: 15px;
-    }
-
-    .partner-item {
-        width: 150px;
-    }
-}
-
-/* Contact Page Styles */
-.about-container {
-    max-width: 1200px;
-    margin: 20px auto;
-    padding: 0 20px;
-}
-
-.about-header {
-    text-align: center;
-    margin-bottom: 30px;
-    padding: 20px 0;
-    border-bottom: 1px solid #eee;
-}
-
-.about-header h1 {
-    color: #1a365d;
-    font-size: 32px;
-    margin-bottom: 10px;
-}
-
-.about-subtitle {
-    color: #666;
-    font-size: 18px;
-    font-style: italic;
-}
-
+/* Стили для форм */
 .form-group {
     margin-bottom: 15px;
 }
@@ -1010,16 +884,141 @@ footer {
     resize: vertical;
 }
 
-.btn-primary {
-    background-color: #1a365d;
-    color: #fff;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s ease;
-}
-
 .btn-primary:hover {
     background-color: #0d2b4d;
+}
+
+/* Анимации */
+@keyframes modalFadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Темная тема */
+@media (prefers-color-scheme: dark) {
+    .api-message-box {
+        background-color: #2a2a2a;
+        border-color: #404040;
+        color: #e0e0e0;
+    }
+
+    .api-message-box::before {
+        background-color: #1a365d;
+    }
+
+    .api-message-box strong {
+        color: #90caf9;
+    }
+}
+
+/* Адаптивность для мобильных устройств */
+@media (max-width: 768px) {
+    .header-container {
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .nav-menu {
+        margin-top: 15px;
+        justify-content: center;
+    }
+
+    .nav-menu li {
+        margin: 0 10px;
+    }
+
+    main {
+        margin: 20px auto;
+    }
+
+    .product-card {
+        max-width: 100%;
+    }
+
+    .modal-container {
+        width: 95%;
+        margin: 10% auto;
+    }
+
+    .modal-header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .modal-product-image {
+        margin-bottom: 15px;
+        margin-right: 0;
+        align-self: center;
+        width: 100px;
+        height: 100px;
+    }
+
+    .modal-product-title {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .modal-footer {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .modal-btn {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .about-header h1 {
+        font-size: 28px;
+    }
+
+    .about-subtitle {
+        font-size: 16px;
+    }
+
+    .team-grid {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    }
+
+    .partners-grid {
+        gap: 15px;
+    }
+
+    .partner-item {
+        width: 150px;
+    }
+
+    .api-message-box::before {
+        left: -8px;
+        width: 16px;
+        height: 16px;
+        font-size: 8px;
+    }
+
+    .api-message-box p {
+        padding-left: 10px;
+    }
+}
+
+@media (max-width: 600px) {
+    .alternatives-list {
+        flex-wrap: wrap;
+    }
+
+    .alternative-item {
+        min-width: calc(50% - 5px);
+        margin-bottom: 10px;
+    }
+
+    .api-message-box {
+        margin: 8px 0;
+        padding: 10px 12px;
+        font-size: 13px;
+    }
 }

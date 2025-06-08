@@ -25,6 +25,11 @@
             <div class="product-description">
                 {{ product.description }}
             </div>
+            {% if ai_message %}
+                <div class="api-message-box minimal">
+                    {{ ai_message|safe }}
+                </div>
+            {% endif %}
 
             {% if product.alternative_products.exists %}
                 <div class="alternatives-title">Этичные альтернативы:</div>
@@ -37,7 +42,7 @@
                                      '{{ alt.get_rating }}',
                                      '{{ alt.is_kyrgyz_product }}',
                                      '{{ alt.category.name }}',
-                                     '{{ alt.description }}',
+                                     '{{ alt.description|escapejs }}',
                                      '{{ alt.is_boycotted }}',
                                      '{{ alt.boycott_reason.title }}')">
 
